@@ -1,5 +1,7 @@
 package com.VitalisTech.VitalisTech.dto;
 
+import com.VitalisTech.VitalisTech.enumtype.ResourceStatus;
+import com.VitalisTech.VitalisTech.enumtype.ResourceType;
 import com.VitalisTech.VitalisTech.validation.RegexConstants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
