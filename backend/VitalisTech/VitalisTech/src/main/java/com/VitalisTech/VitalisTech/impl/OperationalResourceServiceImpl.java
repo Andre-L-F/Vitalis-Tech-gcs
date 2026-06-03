@@ -3,7 +3,7 @@ package com.VitalisTech.VitalisTech.impl;
 
 
 import com.VitalisTech.VitalisTech.dto.OperationalResourceRequest;
-import com.VitalisTech.VitalisTech.enitity.OperationalResource;
+import com.VitalisTech.VitalisTech.entity.OperationalResource;
 import com.VitalisTech.VitalisTech.repository.OperationalResourceRepository;
 import com.VitalisTech.VitalisTech.service.OperationalResourceService;
 import org.springframework.stereotype.Service;
