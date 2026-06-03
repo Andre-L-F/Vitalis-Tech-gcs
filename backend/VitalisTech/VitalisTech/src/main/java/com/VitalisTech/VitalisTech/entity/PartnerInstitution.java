@@ -1,4 +1,4 @@
-package com.VitalisTech.VitalisTech.enitity;
+package com.VitalisTech.VitalisTech.entity;
 
 import com.VitalisTech.VitalisTech.enumtype.InstitutionType;
 import jakarta.persistence.*;

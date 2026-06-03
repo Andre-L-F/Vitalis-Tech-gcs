@@ -1,6 +1,6 @@
 package com.VitalisTech.VitalisTech.repository;
 
-import com.VitalisTech.VitalisTech.enitity.Attendance;
+import com.VitalisTech.VitalisTech.entity.Attendance;
 import com.VitalisTech.VitalisTech.enumtype.AttendanceStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 

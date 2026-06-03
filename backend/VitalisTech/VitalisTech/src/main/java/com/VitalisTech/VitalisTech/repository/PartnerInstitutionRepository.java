@@ -1,6 +1,6 @@
 package com.VitalisTech.VitalisTech.repository;
 
-import com.VitalisTech.VitalisTech.enitity.PartnerInstitution;
+import com.VitalisTech.VitalisTech.entity.PartnerInstitution;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,6 +1,6 @@
 package com.VitalisTech.VitalisTech.repository;
 
-import com.VitalisTech.VitalisTech.enitity.Occurrence;
+import com.VitalisTech.VitalisTech.entity.Occurrence;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,6 +1,7 @@
 package com.VitalisTech.VitalisTech.entity;
 
-
+import com.VitalisTech.VitalisTech.enumtype.ResourceStatus;
+import com.VitalisTech.VitalisTech.enumtype.ResourceType;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,19 +12,22 @@ public class OperationalResource {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 120)
     private String nome;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private ResourceType tipo;
 
     @Column(nullable = false, unique = true, length = 7)
     private String placa;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private ResourceStatus status;
+
+    @Column(length = 120)
+    private String baseAlocacao;
 
     public OperationalResource() {
     }
@@ -62,5 +66,13 @@ public class OperationalResource {
 
     public void setStatus(ResourceStatus status) {
         this.status = status;
+    }
+
+    public String getBaseAlocacao() {
+        return baseAlocacao;
+    }
+
+    public void setBaseAlocacao(String baseAlocacao) {
+        this.baseAlocacao = baseAlocacao;
     }
 }
