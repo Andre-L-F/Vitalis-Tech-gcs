@@ -2,6 +2,7 @@ package com.VitalisTech.VitalisTech.controller;
 
 import com.VitalisTech.VitalisTech.dto.OperationalResourceRequest;
 import com.VitalisTech.VitalisTech.entity.OperationalResource;
+import com.VitalisTech.VitalisTech.enumtype.ResourceStatus;
 import com.VitalisTech.VitalisTech.service.OperationalResourceService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -33,5 +34,26 @@ public class OperationalResourceController {
     @GetMapping("/{id}")
     public ResponseEntity<OperationalResource> findById(@PathVariable Long id) {
         return ResponseEntity.ok(service.findById(id));
+    }
+
+    @GetMapping("/placa/{placa}")
+    public ResponseEntity<OperationalResource> findByPlaca(@PathVariable String placa) {
+        return ResponseEntity.ok(service.findByPlaca(placa));
+    }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<OperationalResource>> findByStatus(@PathVariable ResourceStatus status) {
+        return ResponseEntity.ok(service.findByStatus(status));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<OperationalResource> update(@PathVariable Long id, @Valid @RequestBody OperationalResourceRequest request) {
+        return ResponseEntity.ok(service.update(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

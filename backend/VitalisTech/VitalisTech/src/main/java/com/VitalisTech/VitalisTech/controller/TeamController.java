@@ -2,6 +2,7 @@ package com.VitalisTech.VitalisTech.controller;
 
 import com.VitalisTech.VitalisTech.dto.TeamRequest;
 import com.VitalisTech.VitalisTech.entity.Team;
+import com.VitalisTech.VitalisTech.enumtype.TeamStatus;
 import com.VitalisTech.VitalisTech.service.TeamService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -33,5 +34,21 @@ public class TeamController {
     @GetMapping("/{id}")
     public ResponseEntity<Team> findById(@PathVariable Long id) {
         return ResponseEntity.ok(service.findById(id));
+    }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<Team>> findByStatus(@PathVariable TeamStatus status) {
+        return ResponseEntity.ok(service.findByStatus(status));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Team> update(@PathVariable Long id, @Valid @RequestBody TeamRequest request) {
+        return ResponseEntity.ok(service.update(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

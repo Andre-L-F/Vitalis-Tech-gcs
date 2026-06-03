@@ -1,7 +1,9 @@
 package com.VitalisTech.VitalisTech.controller;
 
 import com.VitalisTech.VitalisTech.dto.AttendanceRequest;
+import com.VitalisTech.VitalisTech.dto.AttendanceUpdateRequest;
 import com.VitalisTech.VitalisTech.entity.Attendance;
+import com.VitalisTech.VitalisTech.enumtype.AttendanceStatus;
 import com.VitalisTech.VitalisTech.service.AttendanceService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -33,6 +35,22 @@ public class AttendanceController {
     @GetMapping("/{id}")
     public ResponseEntity<Attendance> findById(@PathVariable Long id) {
         return ResponseEntity.ok(service.findById(id));
+    }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<Attendance>> findByStatus(@PathVariable AttendanceStatus status) {
+        return ResponseEntity.ok(service.findByStatus(status));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Attendance> update(@PathVariable Long id, @Valid @RequestBody AttendanceUpdateRequest request) {
+        return ResponseEntity.ok(service.update(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}/finalizar")
