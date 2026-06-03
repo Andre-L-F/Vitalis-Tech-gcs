@@ -1,11 +1,14 @@
 package com.VitalisTech.VitalisTech.repository;
 
 import com.VitalisTech.VitalisTech.entity.OperationalResource;
+import com.VitalisTech.VitalisTech.enumtype.ResourceStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface OperationalResourceRepository extends JpaRepository<OperationalResource, Long> {
     boolean existsByPlaca(String placa);
     Optional<OperationalResource> findByPlaca(String placa);
+    List<OperationalResource> findByStatus(ResourceStatus status);
 }

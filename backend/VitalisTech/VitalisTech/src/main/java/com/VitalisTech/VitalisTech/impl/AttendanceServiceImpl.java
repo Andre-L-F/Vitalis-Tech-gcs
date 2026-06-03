@@ -2,6 +2,7 @@ package com.VitalisTech.VitalisTech.impl;
 
 
 import com.VitalisTech.VitalisTech.dto.AttendanceRequest;
+import com.VitalisTech.VitalisTech.dto.AttendanceUpdateRequest;
 import com.VitalisTech.VitalisTech.entity.Attendance;
 import com.VitalisTech.VitalisTech.entity.Occurrence;
 import com.VitalisTech.VitalisTech.entity.OperationalResource;
@@ -88,6 +89,31 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
+    public Attendance update(Long id, AttendanceUpdateRequest request) {
+        Attendance attendance = findById(id);
+
+        if (attendance.getStatus() == AttendanceStatus.FINALIZADO) {
+            throw new IllegalArgumentException("Não é possível alterar atendimento finalizado.");
+        }
+
+        attendance.setObservacoes(request.getObservacoes());
+        attendance.setStatus(request.getStatus());
+
+        return attendanceRepository.save(attendance);
+    }
+
+    @Override
+    public void delete(Long id) {
+        Attendance attendance = findById(id);
+
+        if (attendance.getStatus() == AttendanceStatus.FINALIZADO) {
+            throw new IllegalArgumentException("Não é possível excluir atendimento finalizado.");
+        }
+
+        attendanceRepository.delete(attendance);
+    }
+
+    @Override
     public Attendance finishAttendance(Long id) {
         Attendance attendance = findById(id);
 
@@ -108,5 +134,10 @@ public class AttendanceServiceImpl implements AttendanceService {
         resourceRepository.save(resource);
 
         return attendanceRepository.save(attendance);
+    }
+
+    @Override
+    public List<Attendance> findByStatus(AttendanceStatus status) {
+        return attendanceRepository.findByStatus(status);
     }
 }
