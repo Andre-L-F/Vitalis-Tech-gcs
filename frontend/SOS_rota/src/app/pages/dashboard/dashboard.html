@@ -1,0 +1,192 @@
+<section class="dashboard-page" id="visao-geral">
+
+  <!-- CABEÇALHO -->
+  <div class="page-title">
+    <div>
+      <h1>Painel Operacional</h1>
+      <p>Monitoramento em tempo real das ocorrências e equipes.</p>
+    </div>
+
+    <a routerLink="/ocorrencias/nova" class="btn-new">
+      <i class="bi bi-plus-circle"></i>
+      Nova Ocorrência
+    </a>
+  </div>
+
+  <div class="metrics-grid">
+
+    @for (metrica of metricas; track metrica.titulo) {
+
+      <div class="metric-card">
+
+        <div class="metric-header">
+          <span>{{ metrica.titulo }}</span>
+
+          <div class="metric-icon" [class]="metrica.classe">
+            <i class="bi" [class]="metrica.icone"></i>
+          </div>
+        </div>
+
+        <strong>{{ metrica.valor }}</strong>
+
+        <small>{{ metrica.variacao }}</small>
+
+      </div>
+
+    }
+
+  </div>
+
+  <!-- ========================= -->
+  <!-- OCORRÊNCIAS -->
+  <!-- ========================= -->
+
+  <div class="panel occurrences-panel" id="ocorrencias">
+
+    <div class="panel-header">
+      <h3>Ocorrências Recentes</h3>
+      <span>Atualizado em tempo real</span>
+    </div>
+
+    <div class="occurrence-list">
+
+      @for (ocorrencia of ocorrencias; track ocorrencia.codigo) {
+
+        <div class="occurrence-item">
+
+          <div>
+            <strong>
+              {{ ocorrencia.codigo }} - {{ ocorrencia.tipo }}
+            </strong>
+
+            <small>
+              {{ ocorrencia.local }}
+            </small>
+          </div>
+
+          <div class="occurrence-meta">
+            <span class="priority">
+              {{ ocorrencia.prioridade }}
+            </span>
+
+            <span>
+              {{ ocorrencia.status }}
+            </span>
+
+            <small>
+              {{ ocorrencia.tempo }}
+            </small>
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+
+  <!-- ========================= -->
+  <!-- MAPA -->
+  <!-- ========================= -->
+
+  <div class="panel tactical-map-panel" id="mapa">
+
+    <div class="panel-header">
+      <h3>Mapa Tático</h3>
+    </div>
+
+    <div class="graph-map">
+
+      <div class="graph-line line-1"></div>
+      <div class="graph-line line-2"></div>
+      <div class="graph-line line-3"></div>
+      <div class="graph-line line-4"></div>
+
+      <div class="graph-node base">
+        <i class="bi bi-hospital"></i>
+        <span>Base Central</span>
+      </div>
+
+      <div class="graph-node occurrence critical">
+        <i class="bi bi-exclamation-triangle"></i>
+        <span>OCR-1025</span>
+      </div>
+
+      <div class="graph-node occurrence high">
+        <i class="bi bi-fire"></i>
+        <span>OCR-1026</span>
+      </div>
+
+      <div class="graph-node unit unit-a">
+        <i class="bi bi-truck"></i>
+        <span>USA-04</span>
+      </div>
+
+      <div class="graph-node unit unit-b">
+        <i class="bi bi-truck-front"></i>
+        <span>USB-07</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ========================= -->
+  <!-- INDICADORES -->
+  <!-- ========================= -->
+
+  <div class="dashboard-grid" id="indicadores">
+
+    <div class="panel chart-panel">
+
+      <div class="panel-header">
+        <h3>Fluxo da Operação</h3>
+        <span>ocorrencias por periodo</span>
+      </div>
+
+      <div class="fake-chart">
+
+        <div style="height: 45%"></div>
+        <div style="height: 70%"></div>
+        <div style="height: 52%"></div>
+        <div style="height: 88%"></div>
+        <div style="height: 61%"></div>
+        <div style="height: 75%"></div>
+        <div style="height: 49%"></div>
+
+      </div>
+
+    </div>
+
+    <div class="panel">
+
+      <div class="panel-header">
+        <h3>Status das Equipes</h3>
+        <span>Operação ativa</span>
+      </div>
+
+      <div class="team-list">
+
+        @for (equipe of equipes; track equipe.nome) {
+
+          <div class="team-item">
+
+            <div>
+              <strong>{{ equipe.nome }}</strong>
+              <small>{{ equipe.unidade }}</small>
+            </div>
+
+            <span>{{ equipe.status }}</span>
+
+          </div>
+
+        }
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>

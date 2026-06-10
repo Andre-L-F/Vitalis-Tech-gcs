@@ -1,5 +1,8 @@
 package com.VitalisTech.VitalisTech.dto;
 
+
+import com.VitalisTech.VitalisTech.enumtype.ResourceStatus;
+import com.VitalisTech.VitalisTech.enumtype.ResourceType;
 import com.VitalisTech.VitalisTech.validation.RegexConstants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +22,8 @@ public class OperationalResourceRequest {
 
     @NotNull
     private ResourceStatus status;
+
+    private String baseAlocacao;
 
     public OperationalResourceRequest() {
     }
@@ -53,5 +58,13 @@ public class OperationalResourceRequest {
 
     public void setStatus(ResourceStatus status) {
         this.status = status;
+    }
+
+    public String getBaseAlocacao() {
+        return baseAlocacao;
+    }
+
+    public void setBaseAlocacao(String baseAlocacao) {
+        this.baseAlocacao = baseAlocacao;
     }
 }

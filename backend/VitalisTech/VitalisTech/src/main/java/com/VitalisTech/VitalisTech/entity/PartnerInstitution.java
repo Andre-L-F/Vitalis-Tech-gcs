@@ -1,44 +1,49 @@
-package com.VitalisTech.VitalisTech.dto;
-
+package com.VitalisTech.VitalisTech.entity;
 
 import com.VitalisTech.VitalisTech.enumtype.InstitutionType;
-import com.VitalisTech.VitalisTech.validation.RegexConstants;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.persistence.*;
 
-public class PartnerInstitutionRequest {
+@Entity
+@Table(name = "instituicoes_parceiras")
+public class PartnerInstitution {
 
-    @NotBlank
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 150)
     private String nome;
 
-    @NotBlank
-    @Pattern(regexp = RegexConstants.CNPJ_FORMATADO, message = "CNPJ inválido. Use 00.000.000/0000-00.")
+    @Column(nullable = false, unique = true, length = 18)
     private String cnpj;
 
-    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
     private InstitutionType tipo;
 
-    @NotBlank
-    @Email(message = "E-mail inválido.")
+    @Column(nullable = false, length = 120)
     private String email;
 
-    @NotBlank
-    @Pattern(regexp = RegexConstants.TELEFONE_BR, message = "Telefone inválido.")
+    @Column(nullable = false, length = 20)
     private String telefone;
 
+    @Column(length = 200)
     private String endereco;
 
-    @Pattern(regexp = RegexConstants.CEP_FORMATADO, message = "CEP inválido. Use 00000-000.")
+    @Column(length = 9)
     private String cep;
 
+    @Column(length = 100)
     private String cidade;
 
-    @NotNull
+    @Column(nullable = false)
     private Boolean ativo;
 
-    public PartnerInstitutionRequest() {
+    public PartnerInstitution() {
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getNome() {

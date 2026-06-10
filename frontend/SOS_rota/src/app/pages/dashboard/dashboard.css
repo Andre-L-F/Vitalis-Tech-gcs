@@ -1,0 +1,387 @@
+.dashboard-page {
+  color: #f8fafc;
+}
+
+.page-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.page-title h1 {
+  font-size: 30px;
+  margin: 0;
+}
+
+.page-title p {
+  color: #94a3b8;
+  margin: 6px 0 0;
+}
+
+.btn-new {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 11px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.metric-card,
+.panel {
+  background: #0b151d;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.metric-card {
+  padding: 20px;
+}
+
+.metric-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.metric-header span {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.metric-card strong {
+  display: block;
+  font-size: 34px;
+  margin-top: 14px;
+}
+
+.metric-card small {
+  color: #94a3b8;
+}
+
+.metric-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metric-icon.danger {
+  background: rgba(220, 38, 38, 0.15);
+  color: #ef4444;
+}
+
+.metric-icon.info {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+}
+
+.metric-icon.success {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.metric-icon.warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.panel {
+  padding: 20px;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 20px;
+}
+
+.panel-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.panel-header span {
+  color: #94a3b8;
+  font-size: 13px;
+}
+.fake-chart {
+  height: 260px;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: 22px;
+  padding-top: 24px;
+}
+
+.fake-chart div {
+  width: 26px;
+  max-width: 26px;
+  min-height: 40px;
+  flex: unset;
+
+  background: #ff1744;
+  box-shadow:
+    0 0 10px rgba(255, 23, 68, 0.32),
+    0 0 22px rgba(255, 23, 68, 0.14);
+
+  transition: 0.2s ease;
+}
+
+.fake-chart div:hover {
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 0 14px rgba(255, 23, 68, 0.48),
+    0 0 30px rgba(255, 23, 68, 0.20);
+}
+
+.team-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.team-item,
+.occurrence-item {
+  background: #090d13;
+  border: 1px solid #1f2937;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.team-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.team-item strong,
+.occurrence-item strong {
+  display: block;
+}
+
+.team-item small,
+.occurrence-item small {
+  color: #94a3b8;
+}
+
+.team-item span {
+  color: #22c55e;
+  font-size: 13px;
+}
+
+.occurrence-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.occurrence-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.occurrence-meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  color: #cbd5e1;
+}
+
+.priority {
+  color: #ef4444;
+  font-weight: 700;
+}
+.btn-new {
+  background: linear-gradient(135deg, #ff1744 0%, #dc2626 45%, #9f1239 100%);
+  color: white;
+  border: 1px solid rgba(255, 23, 68, 0.65);
+  padding: 11px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  text-decoration: none;
+  box-shadow:
+    0 0 18px rgba(255, 23, 68, 0.35),
+    0 0 42px rgba(220, 38, 38, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition: 0.2s ease;
+}
+
+.btn-new:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 24px rgba(255, 23, 68, 0.55),
+    0 0 56px rgba(220, 38, 38, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+.tactical-map-panel {
+  margin-bottom: 24px;
+}
+
+.map-mode {
+  color: #ff1744;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.graph-map {
+  position: relative;
+  height: 360px;
+  overflow: hidden;
+
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 23, 68, 0.10), transparent 24%),
+    radial-gradient(circle at 80% 30%, rgba(59, 130, 246, 0.10), transparent 26%),
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    #090d13;
+
+  background-size:
+    auto,
+    auto,
+    34px 34px,
+    34px 34px,
+    auto;
+}
+
+.graph-node {
+  position: absolute;
+  z-index: 2;
+
+  min-width: 116px;
+  padding: 12px 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  border-radius: 14px;
+
+  background: rgba(13, 17, 23, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  color: #f8fafc;
+  font-weight: 700;
+  font-size: 13px;
+
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.32);
+}
+
+.graph-node i {
+  font-size: 17px;
+}
+
+.graph-node.base {
+  left: 42%;
+  top: 42%;
+  border-color: rgba(255, 23, 68, 0.42);
+  box-shadow:
+    0 0 24px rgba(255, 23, 68, 0.20),
+    0 16px 32px rgba(0, 0, 0, 0.32);
+}
+
+.graph-node.critical {
+  left: 12%;
+  top: 18%;
+  color: #ff1744;
+}
+
+.graph-node.high {
+  right: 12%;
+  top: 22%;
+  color: #f59e0b;
+}
+
+.graph-node.unit-a {
+  left: 18%;
+  bottom: 18%;
+  color: #60a5fa;
+}
+
+.graph-node.unit-b {
+  right: 18%;
+  bottom: 16%;
+  color: #22c55e;
+}
+
+.graph-line {
+  position: absolute;
+  z-index: 1;
+
+  height: 2px;
+  transform-origin: left center;
+
+  background: linear-gradient(
+    90deg,
+    rgba(255, 23, 68, 0.05),
+    rgba(255, 23, 68, 0.48),
+    rgba(255, 23, 68, 0.05)
+  );
+
+  box-shadow: 0 0 14px rgba(255, 23, 68, 0.28);
+}
+
+.line-1 {
+  width: 340px;
+  left: 23%;
+  top: 32%;
+  transform: rotate(18deg);
+}
+
+.line-2 {
+  width: 310px;
+  left: 47%;
+  top: 36%;
+  transform: rotate(-18deg);
+}
+
+.line-3 {
+  width: 280px;
+  left: 27%;
+  bottom: 34%;
+  transform: rotate(-20deg);
+}
+
+.line-4 {
+  width: 270px;
+  right: 26%;
+  bottom: 33%;
+  transform: rotate(18deg);
+}
+#ocorrencias,
+#mapa,
+#indicadores {
+  scroll-margin-top: 120px;
+}

@@ -1,0 +1,50 @@
+<header class="header">
+
+  <div class="header-search">
+
+    <i class="bi bi-search"></i>
+
+    <input
+      type="text"
+      placeholder="Buscar ocorrência, equipe, endereço..."
+    >
+
+    <span class="shortcut">Ctrl K</span>
+
+  </div>
+
+  <div class="header-right">
+
+    <div class="date-time">
+
+      <span class="date">
+        {{ currentTime | date:'dd MMM' }}
+      </span>
+
+      <span class="separator">•</span>
+
+      <span class="time">
+        {{ currentTime | date:'HH:mm:ss' }}
+      </span>
+
+      <span class="live">
+        AO VIVO
+      </span>
+    </div>
+
+    <div class="user-card">
+
+      <div class="avatar">
+        OP
+      </div>
+
+      <div class="user-info">
+        <strong>Operador</strong>
+        <span>Central de Emergência</span>
+      </div>
+
+    </div>
+
+  </div>
+
+</header>
