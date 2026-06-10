@@ -1,0 +1,178 @@
+<section class="nova-ocorrencia-page">
+
+  <div class="page-header">
+    <div>
+      <span class="eyebrow">OPERAÇÃO • NOVO REGISTRO</span>
+      <h1>Nova Ocorrência</h1>
+      <p>Preencha os dados do chamado para iniciar o atendimento.</p>
+    </div>
+  </div>
+
+  <div class="occurrence-layout">
+
+    <div class="left-column">
+
+      <div class="section-card">
+        <div class="section-title">
+          <i class="bi bi-telephone"></i>
+          <h2>Dados do Chamado</h2>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Origem do Chamado</label>
+            <select>
+              <option>192 — SAMU</option>
+              <option>193 — Bombeiros</option>
+              <option>Defesa Civil</option>
+              <option>Guarda Municipal</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Tipo de Ocorrência</label>
+            <select [(ngModel)]="ocorrencia.tipo">
+              <option value="">Selecione...</option>
+              <option>Acidente de trânsito</option>
+              <option>Cardíaca / vascular</option>
+              <option>Mal súbito</option>
+              <option>Incêndio</option>
+              <option>Resgate</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Prioridade</label>
+            <div class="priority-options">
+              <button type="button">P1 — Crítica</button>
+              <button type="button">P2 — Alta</button>
+              <button type="button">P3 — Média</button>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Descrição da Ocorrência</label>
+            <textarea
+              rows="4"
+              placeholder="Descreva o ocorrido relatado pelo solicitante..."
+              [(ngModel)]="ocorrencia.descricao"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title victim">
+          <i class="bi bi-person"></i>
+          <h2>Vítima</h2>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nome</label>
+            <input type="text" placeholder="Nome completo">
+          </div>
+
+          <div class="form-group">
+            <label>Idade</label>
+            <input type="number" placeholder="00">
+          </div>
+
+          <div class="form-group">
+            <label>Sexo</label>
+            <select>
+              <option>Não informado</option>
+              <option>Feminino</option>
+              <option>Masculino</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Sintomas / Queixa Principal</label>
+            <input type="text" placeholder="Ex.: dor torácica intensa, tontura, sangramento...">
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title location">
+          <i class="bi bi-geo-alt"></i>
+          <h2>Localização</h2>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>Endereço</label>
+            <input
+              type="text"
+              placeholder="Digite o endereço da ocorrência"
+              [(ngModel)]="ocorrencia.endereco"
+            >
+          </div>
+
+          <div class="form-group">
+            <label>Bairro</label>
+            <input type="text" placeholder="Bairro">
+          </div>
+
+          <div class="form-group">
+            <label>Ponto de Referência</label>
+            <input type="text" placeholder="Ex.: próximo ao mercado, escola...">
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <aside class="right-column">
+
+      <div class="side-card">
+        <span class="side-label">RECURSOS DISPONÍVEIS</span>
+
+        <div class="resource-item">
+          <div>
+            <strong>USA-04</strong>
+            <small>UTI Móvel</small>
+          </div>
+          <span>Disponível</span>
+        </div>
+
+        <div class="resource-item">
+          <div>
+            <strong>USB-07</strong>
+            <small>Suporte Básico</small>
+          </div>
+          <span>Disponível</span>
+        </div>
+
+        <div class="resource-item">
+          <div>
+            <strong>RES-01</strong>
+            <small>Resgate</small>
+          </div>
+          <span>Disponível</span>
+        </div>
+      </div>
+
+      <div class="side-card">
+        <span class="side-label">PROTOCOLO</span>
+        <strong class="protocol">OC-2846</strong>
+        <p>Gerado automaticamente ao despachar a ocorrência.</p>
+      </div>
+
+      <div class="side-card actions-card">
+        <button class="btn-secondary">
+          Cancelar
+        </button>
+
+        <button class="btn-primary">
+          <i class="bi bi-send"></i>
+          Despachar Ocorrência
+        </button>
+      </div>
+
+    </aside>
+
+  </div>
+
+</section>

@@ -1,0 +1,24 @@
+.app-shell {
+  height: 100vh;
+  display: flex;
+  background: #090d13;
+}
+
+.main-area {
+  flex: 1;
+  margin-left: 280px;
+  height: 100vh;
+  overflow-y: auto;
+  background: #090d13;
+}
+
+.page-content {
+  padding: 128px 32px 32px;
+}
+.main-area {
+  scrollbar-width: none;
+}
+
+.main-area::-webkit-scrollbar {
+  display: none;
+}

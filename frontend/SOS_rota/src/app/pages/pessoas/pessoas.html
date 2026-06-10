@@ -1,0 +1,76 @@
+<section class="pessoas-page">
+
+  <div class="page-header">
+    <div>
+      <span class="eyebrow">OPERAÇÃO • PESSOAS</span>
+      <h1>Pessoas</h1>
+      <p>Controle dos profissionais e operadores cadastrados.</p>
+    </div>
+
+    <button class="btn-primary">
+      <i class="bi bi-plus-circle"></i>
+      Nova Pessoa
+    </button>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span>Total</span>
+      <strong>24</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Ativos</span>
+      <strong>21</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Em Atendimento</span>
+      <strong>3</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Setores</span>
+      <strong>5</strong>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-header">
+      <h2>Equipe Cadastrada</h2>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Cargo</th>
+          <th>Setor</th>
+          <th>Status</th>
+          <th>Contato</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (pessoa of pessoas; track pessoa.nome) {
+          <tr>
+            <td><strong>{{ pessoa.nome }}</strong></td>
+            <td>{{ pessoa.cargo }}</td>
+            <td>{{ pessoa.setor }}</td>
+            <td>
+              <span
+                class="status"
+                [class.available]="pessoa.status === 'Ativo'"
+                [class.attending]="pessoa.status === 'Em atendimento'"
+              >
+                {{ pessoa.status }}
+              </span>
+            </td>
+            <td>{{ pessoa.contato }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+</section>

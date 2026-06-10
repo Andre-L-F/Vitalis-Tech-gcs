@@ -1,0 +1,156 @@
+.header {
+  height: 88px;
+
+  position: fixed;
+  top: 0;
+  left: 280px;
+  right: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 28px;
+
+  background: rgba(13, 17, 23, 0.58);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.header-search {
+  width: 520px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 0 16px;
+
+  background: rgba(255, 255, 255, 0.03);
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  border-radius: 12px;
+}
+
+.header-search i {
+  color: #64748b;
+}
+
+.header-search input {
+  flex: 1;
+
+  background: transparent;
+  border: none;
+  outline: none;
+
+  color: #f8fafc;
+
+  font-size: 14px;
+}
+
+.header-search input::placeholder {
+  color: #64748b;
+}
+
+.shortcut {
+  font-size: 11px;
+
+  color: #94a3b8;
+
+  padding: 4px 8px;
+
+  border-radius: 6px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.date-time {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: #cbd5e1;
+}
+
+.date {
+  color: #94a3b8;
+  letter-spacing: 1px;
+}
+
+.time {
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+.separator {
+  color: #ff1744;
+}
+
+.live {
+  font-size: 10px;
+  letter-spacing: 1px;
+
+  color: #ff1744;
+}
+
+
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 8px 12px;
+
+  border-radius: 12px;
+
+  background: rgba(255,255,255,0.03);
+
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  font-weight: 700;
+
+  color: white;
+
+  background: linear-gradient(
+    135deg,
+    #ff1744,
+    #dc2626,
+    #9f1239
+  );
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-info strong {
+  color: #f8fafc;
+  font-size: 14px;
+}
+
+.user-info span {
+  color: #64748b;
+  font-size: 12px;
+}

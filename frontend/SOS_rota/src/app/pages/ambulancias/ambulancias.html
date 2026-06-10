@@ -1,0 +1,103 @@
+<section class="ambulancias-page">
+
+  <div class="page-header">
+
+    <div>
+      <span class="eyebrow">OPERAÇÃO • FROTA</span>
+
+      <h1>Ambulâncias</h1>
+
+      <p>
+        Gerenciamento das unidades de atendimento.
+      </p>
+    </div>
+
+    <button class="btn-primary">
+      <i class="bi bi-plus-circle"></i>
+      Nova Ambulância
+    </button>
+
+  </div>
+
+  <div class="stats-grid">
+
+    <div class="stat-card">
+      <span>Total</span>
+      <strong>12</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Disponíveis</span>
+      <strong>7</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Em Atendimento</span>
+      <strong>4</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Manutenção</span>
+      <strong>1</strong>
+    </div>
+
+  </div>
+
+  <div class="table-card">
+
+    <div class="table-header">
+      <h2>Frota Operacional</h2>
+    </div>
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Tipo</th>
+          <th>Status</th>
+          <th>Equipe</th>
+          <th>Localização</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        @for (ambulancia of ambulancias; track ambulancia.codigo) {
+
+          <tr>
+
+            <td>
+              <strong>{{ ambulancia.codigo }}</strong>
+            </td>
+
+            <td>{{ ambulancia.tipo }}</td>
+
+            <td>
+
+              <span
+                class="status"
+                [class.available]="ambulancia.status === 'Disponível'"
+                [class.attending]="ambulancia.status === 'Em atendimento'"
+                [class.maintenance]="ambulancia.status === 'Manutenção'"
+              >
+                {{ ambulancia.status }}
+              </span>
+
+            </td>
+
+            <td>{{ ambulancia.equipe }}</td>
+
+            <td>{{ ambulancia.localizacao }}</td>
+
+          </tr>
+
+        }
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</section>

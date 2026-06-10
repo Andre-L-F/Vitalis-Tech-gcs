@@ -1,0 +1,77 @@
+<section class="equipes-page">
+
+  <div class="page-header">
+    <div>
+      <span class="eyebrow">OPERAÇÃO • EQUIPES</span>
+      <h1>Equipes</h1>
+      <p>Controle das equipes operacionais em atendimento.</p>
+    </div>
+
+    <button class="btn-primary">
+      <i class="bi bi-plus-circle"></i>
+      Nova Equipe
+    </button>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span>Total</span>
+      <strong>9</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Disponíveis</span>
+      <strong>3</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Em Atendimento</span>
+      <strong>4</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>Deslocamento</span>
+      <strong>2</strong>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-header">
+      <h2>Equipes Operacionais</h2>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Tipo</th>
+          <th>Status</th>
+          <th>Responsável</th>
+          <th>Unidade</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (equipe of equipes; track equipe.codigo) {
+          <tr>
+            <td><strong>{{ equipe.codigo }}</strong></td>
+            <td>{{ equipe.tipo }}</td>
+            <td>
+              <span
+                class="status"
+                [class.available]="equipe.status === 'Disponível'"
+                [class.attending]="equipe.status === 'Em atendimento'"
+                [class.moving]="equipe.status === 'Deslocamento'"
+              >
+                {{ equipe.status }}
+              </span>
+            </td>
+            <td>{{ equipe.responsavel }}</td>
+            <td>{{ equipe.unidade }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+</section>
