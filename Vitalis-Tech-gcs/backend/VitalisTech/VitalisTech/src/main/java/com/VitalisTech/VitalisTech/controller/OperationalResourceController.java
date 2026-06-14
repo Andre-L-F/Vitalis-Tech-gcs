@@ -10,9 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("/api/recursos")
+@CrossOrigin(origins = "http://localhost:4200")
 public class OperationalResourceController {
 
     private final OperationalResourceService service;
