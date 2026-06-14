@@ -1,31 +1,39 @@
-package com.VitalisTech.VitalisTech.dto;
-
+package com.VitalisTech.VitalisTech.entity;
 
 import com.VitalisTech.VitalisTech.enumtype.ResourceStatus;
 import com.VitalisTech.VitalisTech.enumtype.ResourceType;
-import com.VitalisTech.VitalisTech.validation.RegexConstants;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.persistence.*;
 
-public class OperationalResourceRequest {
+@Entity
+@Table(name = "recursos_operacionais")
+public class OperationalResource {
 
-    @NotBlank
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 120)
     private String nome;
 
-    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
     private ResourceType tipo;
 
-    @NotBlank
-    @Pattern(regexp = RegexConstants.PLACA_MERCOSUL, message = "Placa inválida. Use o padrão AAA1A11.")
+    @Column(nullable = false, unique = true, length = 7)
     private String placa;
 
-    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
     private ResourceStatus status;
 
+    @Column(length = 120)
     private String baseAlocacao;
 
-    public OperationalResourceRequest() {
+    public OperationalResource() {
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getNome() {
