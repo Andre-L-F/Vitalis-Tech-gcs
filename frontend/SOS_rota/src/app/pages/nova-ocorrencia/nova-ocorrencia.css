@@ -232,3 +232,77 @@
     0 0 48px rgba(220, 38, 38, 0.16),
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
+.field-hint {
+  margin-top: 6px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.priority-options {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.priority-options button.active {
+  color: #ff1744;
+  border-color: rgba(255, 23, 68, 0.45);
+  background: rgba(255, 23, 68, 0.10);
+  box-shadow: 0 0 14px rgba(255, 23, 68, 0.14);
+}
+
+.priority-options button:first-child {
+  color: #94a3b8;
+  border-color: rgba(255, 255, 255, 0.06);
+  background: #090d13;
+  box-shadow: none;
+}
+
+.priority-options button:first-child.active {
+  color: #ff1744;
+  border-color: rgba(255, 23, 68, 0.45);
+  background: rgba(255, 23, 68, 0.10);
+  box-shadow: 0 0 14px rgba(255, 23, 68, 0.14);
+}
+
+.resource-empty {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.required {
+  color: #ff1744;
+  margin-left: 4px;
+  font-weight: 800;
+}
+
+.actions-card .btn-primary {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.actions-card .btn-primary span {
+  line-height: 1.2;
+}
+.form-message {
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.form-message.error {
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.form-message.success {
+  color: #86efac;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
