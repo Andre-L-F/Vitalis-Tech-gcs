@@ -1,10 +1,10 @@
-<section class="dashboard-page" id="visao-geral">
+<section class="dashboard-page">
 
-  <!-- CABEÇALHO -->
-  <div class="page-title">
+  <div class="dashboard-header">
     <div>
+      <span class="eyebrow">CENTRAL OPERACIONAL</span>
       <h1>Painel Operacional</h1>
-      <p>Monitoramento em tempo real das ocorrências e equipes.</p>
+      <p>Visão geral das ocorrências, recursos e equipes em operação.</p>
     </div>
 
     <a routerLink="/ocorrencias/nova" class="btn-new">
@@ -15,145 +15,90 @@
 
   <div class="metrics-grid">
 
-    @for (metrica of metricas; track metrica.titulo) {
-
-      <div class="metric-card">
-
-        <div class="metric-header">
-          <span>{{ metrica.titulo }}</span>
-
-          <div class="metric-icon" [class]="metrica.classe">
-            <i class="bi" [class]="metrica.icone"></i>
-          </div>
-        </div>
-
-        <strong>{{ metrica.valor }}</strong>
-
-        <small>{{ metrica.variacao }}</small>
-
+    <div class="metric-card danger">
+      <div>
+        <span>Ocorrências Ativas</span>
+        <strong>{{ ocorrenciasAtivas }}</strong>
+        <small>Total cadastradas: {{ ocorrencias.length }}</small>
       </div>
 
-    }
-
-  </div>
-
-  <!-- ========================= -->
-  <!-- OCORRÊNCIAS -->
-  <!-- ========================= -->
-
-  <div class="panel occurrences-panel" id="ocorrencias">
-
-    <div class="panel-header">
-      <h3>Ocorrências Recentes</h3>
-      <span>Atualizado em tempo real</span>
+      <i class="bi bi-exclamation-triangle"></i>
     </div>
 
-    <div class="occurrence-list">
+    <div class="metric-card info">
+      <div>
+        <span>Equipes Cadastradas</span>
+        <strong>{{ equipes.length }}</strong>
+        <small>{{ equipesDisponiveis }} disponíveis</small>
+      </div>
 
-      @for (ocorrencia of ocorrencias; track ocorrencia.codigo) {
+      <i class="bi bi-people"></i>
+    </div>
 
-        <div class="occurrence-item">
+    <div class="metric-card success">
+      <div>
+        <span>Recursos Operacionais</span>
+        <strong>{{ recursos.length }}</strong>
+        <small>{{ recursosDisponiveis }} disponíveis</small>
+      </div>
 
-          <div>
-            <strong>
-              {{ ocorrencia.codigo }} - {{ ocorrencia.tipo }}
-            </strong>
+      <i class="bi bi-truck"></i>
+    </div>
 
-            <small>
-              {{ ocorrencia.local }}
-            </small>
-          </div>
+    <div class="metric-card warning">
+      <div>
+        <span>Status do Sistema</span>
+        <strong>ON</strong>
+        <small>Backend integrado</small>
+      </div>
 
-          <div class="occurrence-meta">
-            <span class="priority">
-              {{ ocorrencia.prioridade }}
-            </span>
-
-            <span>
-              {{ ocorrencia.status }}
-            </span>
-
-            <small>
-              {{ ocorrencia.tempo }}
-            </small>
-          </div>
-
-        </div>
-
-      }
-
+      <i class="bi bi-activity"></i>
     </div>
 
   </div>
 
-  <!-- ========================= -->
-  <!-- MAPA -->
-  <!-- ========================= -->
+  <div class="dashboard-grid">
 
-  <div class="panel tactical-map-panel" id="mapa">
-
-    <div class="panel-header">
-      <h3>Mapa Tático</h3>
-    </div>
-
-    <div class="graph-map">
-
-      <div class="graph-line line-1"></div>
-      <div class="graph-line line-2"></div>
-      <div class="graph-line line-3"></div>
-      <div class="graph-line line-4"></div>
-
-      <div class="graph-node base">
-        <i class="bi bi-hospital"></i>
-        <span>Base Central</span>
-      </div>
-
-      <div class="graph-node occurrence critical">
-        <i class="bi bi-exclamation-triangle"></i>
-        <span>OCR-1025</span>
-      </div>
-
-      <div class="graph-node occurrence high">
-        <i class="bi bi-fire"></i>
-        <span>OCR-1026</span>
-      </div>
-
-      <div class="graph-node unit unit-a">
-        <i class="bi bi-truck"></i>
-        <span>USA-04</span>
-      </div>
-
-      <div class="graph-node unit unit-b">
-        <i class="bi bi-truck-front"></i>
-        <span>USB-07</span>
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- ========================= -->
-  <!-- INDICADORES -->
-  <!-- ========================= -->
-
-  <div class="dashboard-grid" id="indicadores">
-
-    <div class="panel chart-panel">
+    <div class="panel occurrences-panel">
 
       <div class="panel-header">
-        <h3>Fluxo da Operação</h3>
-        <span>ocorrencias por periodo</span>
+        <div>
+          <span class="eyebrow">OCORRÊNCIAS</span>
+          <h2>Chamados Recentes</h2>
+        </div>
+
+        <a routerLink="/ocorrencias/nova">Novo chamado</a>
       </div>
 
-      <div class="fake-chart">
+      <div class="occurrence-list">
 
-        <div style="height: 45%"></div>
-        <div style="height: 70%"></div>
-        <div style="height: 52%"></div>
-        <div style="height: 88%"></div>
-        <div style="height: 61%"></div>
-        <div style="height: 75%"></div>
-        <div style="height: 49%"></div>
+        @for (ocorrencia of ocorrenciasRecentes; track ocorrencia.id) {
+
+          <div class="occurrence-item">
+            <div class="occurrence-main">
+              <strong>{{ ocorrencia.protocolo }}</strong>
+              <span>{{ ocorrencia.descricao }}</span>
+              <small>{{ ocorrencia.endereco }} • {{ ocorrencia.cidade }}</small>
+            </div>
+
+            <div class="occurrence-tags">
+              <span class="priority">
+                {{ traduzirPrioridade(ocorrencia.prioridade) }}
+              </span>
+
+              <span class="status">
+                {{ traduzirStatus(ocorrencia.status) }}
+              </span>
+            </div>
+          </div>
+
+        } @empty {
+
+          <div class="empty-state">
+            Nenhuma ocorrência cadastrada ainda.
+          </div>
+
+        }
 
       </div>
 
@@ -162,23 +107,67 @@
     <div class="panel">
 
       <div class="panel-header">
-        <h3>Status das Equipes</h3>
-        <span>Operação ativa</span>
+        <div>
+          <span class="eyebrow">RECURSOS</span>
+          <h2>Ambulâncias e Viaturas</h2>
+        </div>
+
+        <a routerLink="/ambulancias">Ver frota</a>
       </div>
 
-      <div class="team-list">
+      <div class="compact-list">
 
-        @for (equipe of equipes; track equipe.nome) {
+        @for (recurso of recursosRecentes; track recurso.id) {
 
-          <div class="team-item">
-
+          <div class="compact-item">
             <div>
-              <strong>{{ equipe.nome }}</strong>
-              <small>{{ equipe.unidade }}</small>
+              <strong>{{ recurso.nome }}</strong>
+              <span>{{ recurso.tipo }} • {{ recurso.placa }}</span>
             </div>
 
-            <span>{{ equipe.status }}</span>
+            <small>{{ traduzirStatus(recurso.status) }}</small>
+          </div>
 
+        } @empty {
+
+          <div class="empty-state">
+            Nenhum recurso cadastrado.
+          </div>
+
+        }
+
+      </div>
+
+    </div>
+
+    <div class="panel">
+
+      <div class="panel-header">
+        <div>
+          <span class="eyebrow">EQUIPES</span>
+          <h2>Equipes Operacionais</h2>
+        </div>
+
+        <a routerLink="/equipes">Ver equipes</a>
+      </div>
+
+      <div class="compact-list">
+
+        @for (equipe of equipesRecentes; track equipe.id) {
+
+          <div class="compact-item">
+            <div>
+              <strong>{{ equipe.nome }}</strong>
+              <span>{{ equipe.responsavel }}</span>
+            </div>
+
+            <small>{{ traduzirStatus(equipe.status) }}</small>
+          </div>
+
+        } @empty {
+
+          <div class="empty-state">
+            Nenhuma equipe cadastrada.
           </div>
 
         }
