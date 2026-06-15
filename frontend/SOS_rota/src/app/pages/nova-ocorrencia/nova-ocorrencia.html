@@ -19,9 +19,11 @@
         </div>
 
         <div class="form-grid">
+
           <div class="form-group">
             <label>Origem do Chamado</label>
-            <select>
+
+            <select [(ngModel)]="origemChamado">
               <option>192 — SAMU</option>
               <option>193 — Bombeiros</option>
               <option>Defesa Civil</option>
@@ -30,57 +32,143 @@
           </div>
 
           <div class="form-group">
-            <label>Tipo de Ocorrência</label>
-            <select [(ngModel)]="ocorrencia.tipo">
+            <label>Tipo de Ocorrência <span class="required">*</span></label>
+
+            <select [(ngModel)]="tipoOcorrencia">
               <option value="">Selecione...</option>
               <option>Acidente de trânsito</option>
               <option>Cardíaca / vascular</option>
               <option>Mal súbito</option>
               <option>Incêndio</option>
               <option>Resgate</option>
+              <option>Trauma</option>
+              <option>Outro</option>
             </select>
           </div>
 
           <div class="form-group full-width">
-            <label>Prioridade</label>
+            <label>Prioridade <span class="required">*</span></label>
+
             <div class="priority-options">
-              <button type="button">P1 — Crítica</button>
-              <button type="button">P2 — Alta</button>
-              <button type="button">P3 — Média</button>
+
+              <button
+                type="button"
+                [class.active]="ocorrencia.prioridade === 'CRITICA'"
+                (click)="selecionarPrioridade('CRITICA')"
+              >
+                P1 — Crítica
+              </button>
+
+              <button
+                type="button"
+                [class.active]="ocorrencia.prioridade === 'ALTA'"
+                (click)="selecionarPrioridade('ALTA')"
+              >
+                P2 — Alta
+              </button>
+
+              <button
+                type="button"
+                [class.active]="ocorrencia.prioridade === 'MEDIA'"
+                (click)="selecionarPrioridade('MEDIA')"
+              >
+                P3 — Média
+              </button>
+
+              <button
+                type="button"
+                [class.active]="ocorrencia.prioridade === 'BAIXA'"
+                (click)="selecionarPrioridade('BAIXA')"
+              >
+                P4 — Baixa
+              </button>
+
             </div>
           </div>
 
           <div class="form-group full-width">
-            <label>Descrição da Ocorrência</label>
+            <label>Descrição da Ocorrência <span class="required">*</span></label>
+
             <textarea
               rows="4"
               placeholder="Descreva o ocorrido relatado pelo solicitante..."
               [(ngModel)]="ocorrencia.descricao"
             ></textarea>
           </div>
+
         </div>
       </div>
 
       <div class="section-card">
         <div class="section-title victim">
           <i class="bi bi-person"></i>
-          <h2>Vítima</h2>
+          <h2>Solicitante / Vítima</h2>
         </div>
 
         <div class="form-grid">
+
           <div class="form-group">
-            <label>Nome</label>
-            <input type="text" placeholder="Nome completo">
+            <label>Nome do Solicitante <span class="required">*</span></label>
+
+            <input
+              type="text"
+              placeholder="Nome completo"
+              [(ngModel)]="ocorrencia.nomeSolicitante"
+            >
+          </div>
+
+          <div class="form-group">
+            <label>Telefone</label>
+
+            <input
+              type="text"
+              placeholder="Ex.: (11) 98765-4321"
+              [(ngModel)]="ocorrencia.telefoneSolicitante"
+            >
+
+            <small class="field-hint">
+              Opcional. Use o formato brasileiro.
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label>CPF</label>
+
+            <input
+              type="text"
+              placeholder="Ex.: 123.456.789-00"
+              [(ngModel)]="ocorrencia.cpfSolicitante"
+            >
+
+            <small class="field-hint">
+              Opcional.
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label>Nome da Vítima</label>
+
+            <input
+              type="text"
+              placeholder="Nome da vítima, se diferente do solicitante"
+              [(ngModel)]="vitimaNome"
+            >
           </div>
 
           <div class="form-group">
             <label>Idade</label>
-            <input type="number" placeholder="00">
+
+            <input
+              type="number"
+              placeholder="00"
+              [(ngModel)]="vitimaIdade"
+            >
           </div>
 
           <div class="form-group">
             <label>Sexo</label>
-            <select>
+
+            <select [(ngModel)]="vitimaSexo">
               <option>Não informado</option>
               <option>Feminino</option>
               <option>Masculino</option>
@@ -89,8 +177,14 @@
 
           <div class="form-group full-width">
             <label>Sintomas / Queixa Principal</label>
-            <input type="text" placeholder="Ex.: dor torácica intensa, tontura, sangramento...">
+
+            <input
+              type="text"
+              placeholder="Ex.: dor torácica intensa, tontura, sangramento..."
+              [(ngModel)]="sintomas"
+            >
           </div>
+
         </div>
       </div>
 
@@ -101,8 +195,10 @@
         </div>
 
         <div class="form-grid">
+
           <div class="form-group full-width">
-            <label>Endereço</label>
+            <label>Endereço <span class="required">*</span></label>
+
             <input
               type="text"
               placeholder="Digite o endereço da ocorrência"
@@ -112,13 +208,48 @@
 
           <div class="form-group">
             <label>Bairro</label>
-            <input type="text" placeholder="Bairro">
+
+            <input
+              type="text"
+              placeholder="Bairro"
+              [(ngModel)]="ocorrencia.bairro"
+            >
+          </div>
+
+          <div class="form-group">
+            <label>Cidade <span class="required">*</span></label>
+
+            <input
+              type="text"
+              placeholder="Cidade"
+              [(ngModel)]="ocorrencia.cidade"
+            >
+          </div>
+
+          <div class="form-group">
+            <label>CEP</label>
+
+            <input
+              type="text"
+              placeholder="Ex.: 00000-000"
+              [(ngModel)]="ocorrencia.cep"
+            >
+
+            <small class="field-hint">
+              Opcional. Use o formato 00000-000.
+            </small>
           </div>
 
           <div class="form-group">
             <label>Ponto de Referência</label>
-            <input type="text" placeholder="Ex.: próximo ao mercado, escola...">
+
+            <input
+              type="text"
+              placeholder="Ex.: próximo ao mercado, escola..."
+              [(ngModel)]="pontoReferencia"
+            >
           </div>
+
         </div>
       </div>
 
@@ -129,46 +260,73 @@
       <div class="side-card">
         <span class="side-label">RECURSOS DISPONÍVEIS</span>
 
-        <div class="resource-item">
-          <div>
-            <strong>USA-04</strong>
-            <small>UTI Móvel</small>
-          </div>
-          <span>Disponível</span>
-        </div>
+        @for (recurso of recursosDisponiveis; track recurso.id) {
 
-        <div class="resource-item">
-          <div>
-            <strong>USB-07</strong>
-            <small>Suporte Básico</small>
-          </div>
-          <span>Disponível</span>
-        </div>
+          <div class="resource-item">
+            <div>
+              <strong>{{ recurso.nome }}</strong>
+              <small>{{ recurso.tipo }} • {{ recurso.baseAlocacao }}</small>
+            </div>
 
-        <div class="resource-item">
-          <div>
-            <strong>RES-01</strong>
-            <small>Resgate</small>
+            <span>Disponível</span>
           </div>
-          <span>Disponível</span>
-        </div>
+
+        } @empty {
+
+          <p class="resource-empty">
+            Nenhum recurso disponível no momento.
+          </p>
+
+        }
+
       </div>
 
       <div class="side-card">
         <span class="side-label">PROTOCOLO</span>
-        <strong class="protocol">OC-2846</strong>
-        <p>Gerado automaticamente ao despachar a ocorrência.</p>
+
+        <strong class="protocol">
+          {{ ocorrencia.protocolo }}
+        </strong>
+
+        <p>Gerado automaticamente antes do despacho da ocorrência.</p>
       </div>
 
       <div class="side-card actions-card">
-        <button class="btn-secondary">
+
+        @if (mensagemErro) {
+          <div class="form-message error">
+            {{ mensagemErro }}
+          </div>
+        }
+
+        @if (mensagemSucesso) {
+          <div class="form-message success">
+            {{ mensagemSucesso }}
+          </div>
+        }
+
+        <button
+          class="btn-secondary"
+          type="button"
+          (click)="limparFormulario()"
+        >
           Cancelar
         </button>
 
-        <button class="btn-primary">
-          <i class="bi bi-send"></i>
-          Despachar Ocorrência
-        </button>
+        <button
+  class="btn-primary"
+  type="button"
+  (mousedown)="$event.preventDefault()"
+  (click)="salvarOcorrencia()"
+  [disabled]="carregando"
+>
+  <i class="bi bi-send"></i>
+
+  <span>
+    {{ carregando ? 'Despachando...' : 'Despachar Ocorrência' }}
+  </span>
+</button>
+
       </div>
 
     </aside>

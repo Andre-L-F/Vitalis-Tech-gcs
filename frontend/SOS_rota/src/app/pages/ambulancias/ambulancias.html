@@ -1,44 +1,41 @@
 <section class="ambulancias-page">
 
   <div class="page-header">
-
     <div>
       <span class="eyebrow">OPERAÇÃO • FROTA</span>
-
       <h1>Ambulâncias</h1>
-
-      <p>
-        Gerenciamento das unidades de atendimento.
-      </p>
+      <p>Gerenciamento dos recursos operacionais cadastrados.</p>
     </div>
 
-    <button class="btn-primary">
+    <button
+      class="btn-primary"
+      (click)="abrirModal()"
+    >
       <i class="bi bi-plus-circle"></i>
-      Nova Ambulância
+      Novo Recurso
     </button>
-
   </div>
 
   <div class="stats-grid">
 
     <div class="stat-card">
       <span>Total</span>
-      <strong>12</strong>
+      <strong>{{ ambulancias.length }}</strong>
     </div>
 
     <div class="stat-card">
       <span>Disponíveis</span>
-      <strong>7</strong>
+      <strong>{{ contarPorStatus('DISPONIVEL') }}</strong>
     </div>
 
     <div class="stat-card">
-      <span>Em Atendimento</span>
-      <strong>4</strong>
+      <span>Em Uso</span>
+      <strong>{{ contarPorStatus('EM_USO') }}</strong>
     </div>
 
     <div class="stat-card">
       <span>Manutenção</span>
-      <strong>1</strong>
+      <strong>{{ contarPorStatus('MANUTENCAO') }}</strong>
     </div>
 
   </div>
@@ -46,50 +43,72 @@
   <div class="table-card">
 
     <div class="table-header">
-      <h2>Frota Operacional</h2>
+      <h2>Recursos Operacionais</h2>
     </div>
 
     <table>
 
       <thead>
         <tr>
-          <th>Código</th>
+          <th>Nome</th>
           <th>Tipo</th>
+          <th>Placa</th>
           <th>Status</th>
-          <th>Equipe</th>
-          <th>Localização</th>
+          <th>Base</th>
+          <th>Ações</th>
         </tr>
       </thead>
 
       <tbody>
 
-        @for (ambulancia of ambulancias; track ambulancia.codigo) {
+        @for (ambulancia of ambulancias; track ambulancia.id) {
 
           <tr>
 
             <td>
-              <strong>{{ ambulancia.codigo }}</strong>
+              <strong>{{ ambulancia.nome }}</strong>
             </td>
-
-            <td>{{ ambulancia.tipo }}</td>
 
             <td>
-
-              <span
-                class="status"
-                [class.available]="ambulancia.status === 'Disponível'"
-                [class.attending]="ambulancia.status === 'Em atendimento'"
-                [class.maintenance]="ambulancia.status === 'Manutenção'"
-              >
-                {{ ambulancia.status }}
-              </span>
-
+              {{ traduzirTipo(ambulancia.tipo) }}
             </td>
 
-            <td>{{ ambulancia.equipe }}</td>
+            <td>
+              {{ ambulancia.placa }}
+            </td>
 
-            <td>{{ ambulancia.localizacao }}</td>
+            <td>
+              <span
+                class="status"
+                [class.available]="ambulancia.status === 'DISPONIVEL'"
+                [class.attending]="ambulancia.status === 'EM_USO'"
+                [class.maintenance]="ambulancia.status === 'MANUTENCAO'"
+              >
+                {{ traduzirStatus(ambulancia.status) }}
+              </span>
+            </td>
 
+            <td>
+              {{ ambulancia.baseAlocacao }}
+            </td>
+
+            <td>
+              <button
+                class="btn-delete"
+                (click)="excluirRecurso(ambulancia.id)"
+              >
+                Excluir
+              </button>
+            </td>
+
+          </tr>
+
+        } @empty {
+
+          <tr>
+            <td colspan="6" class="empty-state">
+              Nenhum recurso operacional cadastrado.
+            </td>
           </tr>
 
         }
@@ -99,5 +118,127 @@
     </table>
 
   </div>
+
+  @if (modalAberto) {
+
+    <div
+      class="modal-overlay"
+      (click)="fecharModal()"
+    >
+
+      <div
+        class="modal-panel"
+        (click)="$event.stopPropagation()"
+      >
+
+        <div class="modal-header">
+
+          <h2>Novo Recurso Operacional</h2>
+
+          <button
+            class="close-btn"
+            (click)="fecharModal()"
+          >
+            <i class="bi bi-x-lg"></i>
+          </button>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Nome</label>
+
+          <input
+            type="text"
+            placeholder="Ex.: USA-04"
+            style="text-transform: uppercase"
+            [(ngModel)]="novoRecurso.nome"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Tipo</label>
+
+          <select [(ngModel)]="novoRecurso.tipo">
+            <option value="AMBULANCIA">Ambulância</option>
+            <option value="VIATURA">Viatura</option>
+            <option value="MOTOLANCIA">Motolância</option>
+            <option value="APOIO">Apoio</option>
+          </select>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Placa</label>
+
+          <input
+            type="text"
+            maxlength="7"
+            placeholder="Ex.: ABC1D23"
+            style="text-transform: uppercase"
+            [(ngModel)]="novoRecurso.placa"
+          />
+
+          <small class="field-hint">
+            Use o padrão Mercosul: AAA1A11.
+          </small>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Status</label>
+
+          <select [(ngModel)]="novoRecurso.status">
+            <option value="DISPONIVEL">Disponível</option>
+            <option value="EM_USO">Em Uso</option>
+            <option value="MANUTENCAO">Manutenção</option>
+          </select>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Base</label>
+
+          <input
+            type="text"
+            placeholder="Ex.: Base Central"
+            [(ngModel)]="novoRecurso.baseAlocacao"
+          />
+
+        </div>
+
+        <div class="modal-actions">
+
+          <button
+            class="btn-secondary"
+            (click)="fecharModal()"
+          >
+            Cancelar
+          </button>
+
+          <button
+            class="btn-primary"
+            (click)="salvarRecurso()"
+            [disabled]="carregando"
+          >
+            @if (carregando) {
+              Salvando...
+            } @else {
+              Salvar
+            }
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
 
 </section>

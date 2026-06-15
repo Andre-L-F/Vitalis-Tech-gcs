@@ -1,7 +1,8 @@
 package com.VitalisTech.VitalisTech.dto;
 
-import com.VitalisTech.VitalisTech.enitity.ResourceStatus;
-import com.VitalisTech.VitalisTech.enitity.ResourceType;
+
+import com.VitalisTech.VitalisTech.enumtype.ResourceStatus;
+import com.VitalisTech.VitalisTech.enumtype.ResourceType;
 import com.VitalisTech.VitalisTech.validation.RegexConstants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -22,17 +23,48 @@ public class OperationalResourceRequest {
     @NotNull
     private ResourceStatus status;
 
-    public OperationalResourceRequest() {}
+    private String baseAlocacao;
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    public OperationalResourceRequest() {
+    }
 
-    public ResourceType getTipo() { return tipo; }
-    public void setTipo(ResourceType tipo) { this.tipo = tipo; }
+    public String getNome() {
+        return nome;
+    }
 
-    public String getPlaca() { return placa; }
-    public void setPlaca(String placa) { this.placa = placa; }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-    public ResourceStatus getStatus() { return status; }
-    public void setStatus(ResourceStatus status) { this.status = status; }
+    public ResourceType getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(ResourceType tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
+    }
+
+    public ResourceStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ResourceStatus status) {
+        this.status = status;
+    }
+
+    public String getBaseAlocacao() {
+        return baseAlocacao;
+    }
+
+    public void setBaseAlocacao(String baseAlocacao) {
+        this.baseAlocacao = baseAlocacao;
+    }
 }

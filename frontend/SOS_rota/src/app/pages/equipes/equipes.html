@@ -4,74 +4,257 @@
     <div>
       <span class="eyebrow">OPERAÇÃO • EQUIPES</span>
       <h1>Equipes</h1>
-      <p>Controle das equipes operacionais em atendimento.</p>
+      <p>Gerenciamento das equipes operacionais cadastradas.</p>
     </div>
 
-    <button class="btn-primary">
+    <button
+      class="btn-primary"
+      (click)="abrirModal()"
+    >
       <i class="bi bi-plus-circle"></i>
       Nova Equipe
     </button>
   </div>
 
   <div class="stats-grid">
+
     <div class="stat-card">
       <span>Total</span>
-      <strong>9</strong>
+      <strong>{{ equipes.length }}</strong>
     </div>
 
     <div class="stat-card">
       <span>Disponíveis</span>
-      <strong>3</strong>
+      <strong>{{ contarPorStatus('DISPONIVEL') }}</strong>
     </div>
 
     <div class="stat-card">
       <span>Em Atendimento</span>
-      <strong>4</strong>
+      <strong>{{ contarPorStatus('EM_ATENDIMENTO') }}</strong>
     </div>
 
     <div class="stat-card">
-      <span>Deslocamento</span>
-      <strong>2</strong>
+      <span>Indisponíveis</span>
+      <strong>{{ contarPorStatus('INDISPONIVEL') }}</strong>
     </div>
+
   </div>
 
   <div class="table-card">
+
     <div class="table-header">
       <h2>Equipes Operacionais</h2>
     </div>
 
     <table>
+
       <thead>
         <tr>
-          <th>Código</th>
-          <th>Tipo</th>
-          <th>Status</th>
+          <th>Nome</th>
           <th>Responsável</th>
-          <th>Unidade</th>
+          <th>Telefone</th>
+          <th>E-mail</th>
+          <th>Localização</th>
+          <th>Status</th>
+          <th>Ações</th>
         </tr>
       </thead>
 
       <tbody>
-        @for (equipe of equipes; track equipe.codigo) {
+
+        @for (equipe of equipes; track equipe.id) {
+
           <tr>
-            <td><strong>{{ equipe.codigo }}</strong></td>
-            <td>{{ equipe.tipo }}</td>
+
+            <td>
+              <strong>{{ equipe.nome }}</strong>
+            </td>
+
+            <td>
+              {{ equipe.responsavel }}
+            </td>
+
+            <td>
+              {{ equipe.telefoneContato }}
+            </td>
+
+            <td>
+              {{ equipe.email }}
+            </td>
+
+            <td>
+              {{ equipe.localizacaoAtual }}
+            </td>
+
             <td>
               <span
                 class="status"
-                [class.available]="equipe.status === 'Disponível'"
-                [class.attending]="equipe.status === 'Em atendimento'"
-                [class.moving]="equipe.status === 'Deslocamento'"
+                [class.available]="equipe.status === 'DISPONIVEL'"
+                [class.moving]="equipe.status === 'EM_SAIDA'"
+                [class.attending]="equipe.status === 'EM_ATENDIMENTO'"
+                [class.unavailable]="equipe.status === 'INDISPONIVEL'"
               >
-                {{ equipe.status }}
+                {{ traduzirStatus(equipe.status) }}
               </span>
             </td>
-            <td>{{ equipe.responsavel }}</td>
-            <td>{{ equipe.unidade }}</td>
+
+            <td>
+              <button
+                class="btn-delete"
+                (click)="excluirEquipe(equipe.id)"
+              >
+                Excluir
+              </button>
+            </td>
+
           </tr>
+
+        } @empty {
+
+          <tr>
+            <td colspan="7" class="empty-state">
+              Nenhuma equipe cadastrada.
+            </td>
+          </tr>
+
         }
+
       </tbody>
+
     </table>
+
   </div>
+
+  @if (modalAberto) {
+
+    <div
+      class="modal-overlay"
+      (click)="fecharModal()"
+    >
+
+      <div
+        class="modal-panel"
+        (click)="$event.stopPropagation()"
+      >
+
+        <div class="modal-header">
+
+          <h2>Nova Equipe</h2>
+
+          <button
+            class="close-btn"
+            (click)="fecharModal()"
+          >
+            <i class="bi bi-x-lg"></i>
+          </button>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Nome da Equipe</label>
+
+          <input
+            type="text"
+            placeholder="Ex.: EQUIPE ALFA"
+            style="text-transform: uppercase"
+            [(ngModel)]="novaEquipe.nome"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Responsável</label>
+
+          <input
+            type="text"
+            placeholder="Ex.: Dr. Rafael Martins"
+            [(ngModel)]="novaEquipe.responsavel"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Telefone</label>
+
+          <input
+            type="text"
+            placeholder="Ex.: (11) 98765-4321"
+            [(ngModel)]="novaEquipe.telefoneContato"
+          />
+
+          <small class="field-hint">
+            Use o formato brasileiro: (11) 98765-4321.
+          </small>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>E-mail</label>
+
+          <input
+            type="email"
+            placeholder="Ex.: equipe.alfa@vitalis.com"
+            [(ngModel)]="novaEquipe.email"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Localização Atual</label>
+
+          <input
+            type="text"
+            placeholder="Ex.: Base Central"
+            [(ngModel)]="novaEquipe.localizacaoAtual"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Status</label>
+
+          <select [(ngModel)]="novaEquipe.status">
+            <option value="DISPONIVEL">Disponível</option>
+            <option value="EM_SAIDA">Em Saída</option>
+            <option value="EM_ATENDIMENTO">Em Atendimento</option>
+            <option value="INDISPONIVEL">Indisponível</option>
+          </select>
+
+        </div>
+
+        <div class="modal-actions">
+
+          <button
+            class="btn-secondary"
+            (click)="fecharModal()"
+          >
+            Cancelar
+          </button>
+
+          <button
+            class="btn-primary"
+            (click)="salvarEquipe()"
+            [disabled]="carregando"
+          >
+            @if (carregando) {
+              Salvando...
+            } @else {
+              Salvar
+            }
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
 
 </section>
