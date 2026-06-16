@@ -160,6 +160,10 @@
   grid-row: span 2;
 }
 
+.tactical-map-panel {
+  grid-column: 1 / -1;
+}
+
 .panel-header {
   display: flex;
   align-items: flex-start;
@@ -270,9 +274,37 @@
 }
 
 .priority {
+  border: 1px solid transparent;
+}
+
+.priority-low {
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.22);
+}
+
+.priority-medium {
+  color: #facc15;
+  background: rgba(250, 204, 21, 0.12);
+  border-color: rgba(250, 204, 21, 0.24);
+}
+
+.priority-high {
   color: #ff1744;
   background: rgba(255, 23, 68, 0.12);
-  border: 1px solid rgba(255, 23, 68, 0.18);
+  border-color: rgba(255, 23, 68, 0.22);
+}
+
+.priority-critical {
+  color: #c084fc;
+  background: rgba(133, 0, 215, 0.14);
+  border-color: rgba(168, 85, 247, 0.26);
+}
+
+.priority-default {
+  color: #94a3b8;
+  background: rgba(148, 163, 184, 0.10);
+  border-color: rgba(148, 163, 184, 0.18);
 }
 
 .status {
@@ -302,6 +334,186 @@
   font-weight: 700;
 }
 
+.map-mode {
+  color: #ff1744;
+
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  white-space: nowrap;
+}
+
+.city-map-wrapper {
+  position: relative;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(circle at 24% 18%, rgba(255, 23, 68, 0.10), transparent 24%),
+    radial-gradient(circle at 78% 34%, rgba(34, 197, 94, 0.08), transparent 28%),
+    linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+    #090d13;
+
+  background-size:
+    auto,
+    auto,
+    34px 34px,
+    34px 34px,
+    auto;
+}
+
+.city-map-svg {
+  display: block;
+
+  width: 100%;
+  height: 540px;
+}
+
+.map-edge {
+  stroke: rgba(148, 163, 184, 0.24);
+  stroke-width: 2;
+  stroke-linecap: round;
+
+  transition: 0.2s ease;
+}
+
+.map-edge:hover {
+  stroke: rgba(255, 23, 68, 0.75);
+  stroke-width: 4;
+
+  filter: drop-shadow(0 0 8px rgba(255, 23, 68, 0.45));
+}
+
+.map-node {
+  cursor: default;
+}
+
+.map-node circle {
+  fill: #0d1117;
+
+  stroke: rgba(148, 163, 184, 0.55);
+  stroke-width: 2;
+
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.45));
+
+  transition: 0.2s ease;
+}
+
+.map-node:hover circle {
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 3;
+
+  filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.18));
+}
+
+.map-node-id {
+  fill: #f8fafc;
+
+  font-size: 10px;
+  font-weight: 900;
+
+  pointer-events: none;
+}
+
+.map-node-label {
+  fill: #cbd5e1;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  paint-order: stroke;
+  stroke: rgba(9, 13, 19, 0.9);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+
+  pointer-events: none;
+}
+
+.map-node.node-resource circle {
+  fill: rgba(34, 197, 94, 0.20);
+
+  stroke: #22c55e;
+  stroke-width: 3;
+
+  filter: drop-shadow(0 0 14px rgba(34, 197, 94, 0.38));
+}
+
+.map-node.node-occurrence circle {
+  fill: rgba(255, 23, 68, 0.32);
+
+  stroke: #ff1744;
+  stroke-width: 4;
+
+  filter: drop-shadow(0 0 18px rgba(255, 23, 68, 0.55));
+}
+
+.map-node.node-occurrence .map-node-label {
+  fill: #ffffff;
+}
+
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+
+  padding: 14px 18px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+
+  background: rgba(13, 17, 23, 0.72);
+}
+
+.map-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  color: #94a3b8;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+
+  border-radius: 999px;
+
+  display: inline-block;
+}
+
+.legend-dot.default {
+  background: #94a3b8;
+}
+
+.legend-dot.resource {
+  background: #22c55e;
+
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.55);
+}
+
+.legend-dot.occurrence {
+  background: #ff1744;
+
+  box-shadow: 0 0 10px rgba(255, 23, 68, 0.55);
+}
+
+.legend-line {
+  width: 28px;
+  height: 2px;
+
+  display: inline-block;
+
+  border-radius: 999px;
+
+  background: rgba(148, 163, 184, 0.5);
+}
+
 @media (max-width: 1180px) {
   .metrics-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -314,6 +526,10 @@
   .occurrences-panel {
     grid-row: auto;
   }
+
+  .tactical-map-panel {
+    grid-column: auto;
+  }
 }
 
 @media (max-width: 760px) {
@@ -323,5 +539,17 @@
 
   .metrics-grid {
     grid-template-columns: 1fr;
+  }
+
+  .panel-header {
+    flex-direction: column;
+  }
+
+  .city-map-svg {
+    height: 430px;
+  }
+
+  .map-node-label {
+    font-size: 10px;
   }
 }

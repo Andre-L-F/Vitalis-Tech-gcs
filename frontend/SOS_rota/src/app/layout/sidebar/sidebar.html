@@ -12,14 +12,11 @@
   </div>
 
   <nav class="menu">
-
-    <p class="menu-title">Operação</p>
-
     <a routerLink="/ocorrencias/nova" routerLinkActive="active" class="emergency-link">
       <i class="bi bi-plus-circle"></i>
       Nova Ocorrência
     </a>
-
+    <p class="menu-title">Operação</p>
     <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       <i class="bi bi-speedometer2"></i>
       Painel Operacional
@@ -42,22 +39,15 @@
 
     <p class="menu-title">Painel & Relatórios</p>
 
-    <a href="#ocorrencias" (click)="scrollToSection('ocorrencias', $event)"
-      [class.section-active]="activeSection === 'ocorrencias'">
+    <a href="" (click)="navegarParaSecao($event, 'ocorrencias')">
       <i class="bi bi-exclamation-triangle"></i>
       Ocorrências
     </a>
 
-    <a routerLink="/mapa-tatico" routerLinkActive="active">
-      <i class="bi bi-geo-alt"></i> Mapa Tático
+    <a href="" (click)="navegarParaSecao($event, 'mapa')">
+      <i class="bi bi-geo-alt"></i>
+      Mapa Tático
     </a>
-
-    <a href="#indicadores" (click)="scrollToSection('indicadores', $event)"
-      [class.section-active]="activeSection === 'indicadores'">
-      <i class="bi bi-bar-chart"></i>
-      Indicadores
-    </a>
-
   </nav>
 
 </aside>

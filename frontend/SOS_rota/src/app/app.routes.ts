@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { MapaTatico } from './pages/mapa-tatico/mapa-tatico';
 import { AppShell } from './layout/app-shell/app-shell';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { Ambulancias } from './pages/ambulancias/ambulancias';
@@ -17,7 +16,6 @@ export const routes: Routes = [
       { path: 'equipes', component: Equipes },
       { path: 'pessoas', component: Pessoas },
       { path: 'ocorrencias/nova', component: NovaOcorrencia },
-      { path: 'mapa-tatico', component: MapaTatico },
     ],
   },
 ];
