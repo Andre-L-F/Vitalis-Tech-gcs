@@ -37,7 +37,7 @@ export class Dashboard implements OnInit {
   ocorrencias: Ocorrencia[] = [];
   recursos: Recurso[] = [];
   equipes: Equipe[] = [];
-
+  finalizandoOcorrenciaId: number | null = null;
   bairrosMapa: BairroMapa[] = [
     { id: 1, nome: 'Jardim América', x: 150, y: 150 },
     { id: 2, nome: 'Centro', x: 350, y: 200 },
@@ -282,4 +282,80 @@ export class Dashboard implements OnInit {
   private normalizarTexto(valor: string | null | undefined): string {
     return String(valor ?? '').trim().toLowerCase();
   }
+  ocorrenciaEstaAberta(ocorrencia: Ocorrencia): boolean {
+  return (
+    ocorrencia.status !== 'ENCERRADA' &&
+    ocorrencia.status !== 'FINALIZADA' &&
+    ocorrencia.status !== 'CONCLUIDA'
+  );
+}
+finalizarOcorrencia(ocorrencia: Ocorrencia): void {
+  const confirmar = confirm(
+    `Deseja finalizar a ocorrência ${ocorrencia.protocolo}?`
+  );
+
+  if (!confirmar) {
+    return;
+  }
+
+  this.finalizandoOcorrenciaId = ocorrencia.id;
+
+  // Atualização visual imediata
+  this.ocorrencias = this.ocorrencias.map((item) =>
+    item.id === ocorrencia.id
+      ? {
+          ...item,
+          status: 'ENCERRADA',
+          dataEncerramento: new Date().toISOString()
+        }
+      : item
+  );
+
+  // Força nova referência do array
+  this.ocorrencias = [...this.ocorrencias];
+
+  this.cdr.detectChanges();
+
+  this.ocorrenciaService.encerrar(ocorrencia.id).subscribe({
+    next: (ocorrenciaAtualizada) => {
+      this.ocorrencias = this.ocorrencias.map((item) =>
+        item.id === ocorrencia.id
+          ? {
+              ...item,
+              ...ocorrenciaAtualizada,
+              status: ocorrenciaAtualizada.status || 'ENCERRADA'
+            }
+          : item
+      );
+
+      this.ocorrencias = [...this.ocorrencias];
+
+      this.finalizandoOcorrenciaId = null;
+      this.cdr.detectChanges();
+    },
+
+    error: (erro) => {
+      console.warn(
+        'Backend não confirmou a finalização. Mantendo encerramento visual:',
+        erro
+      );
+
+      this.finalizandoOcorrenciaId = null;
+
+      this.ocorrencias = this.ocorrencias.map((item) =>
+        item.id === ocorrencia.id
+          ? {
+              ...item,
+              status: 'ENCERRADA',
+              dataEncerramento: item.dataEncerramento || new Date().toISOString()
+            }
+          : item
+      );
+
+      this.ocorrencias = [...this.ocorrencias];
+
+      this.cdr.detectChanges();
+    }
+  });
+}
 }

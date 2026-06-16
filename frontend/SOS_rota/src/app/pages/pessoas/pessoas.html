@@ -2,73 +2,79 @@
 
   <div class="page-header">
     <div>
-      <span class="eyebrow">OPERAÇÃO • PESSOAS</span>
+      <span class="eyebrow">GESTÃO DE PESSOAS</span>
       <h1>Pessoas</h1>
-      <p>Controle dos profissionais e operadores cadastrados.</p>
+      <p>Profissionais carregados a partir da base inicial do backend.</p>
     </div>
-
-    <button class="btn-primary">
-      <i class="bi bi-plus-circle"></i>
-      Nova Pessoa
-    </button>
   </div>
 
-  <div class="stats-grid">
-    <div class="stat-card">
-      <span>Total</span>
-      <strong>0</strong>
+  <div class="metrics-grid">
+
+    <div class="metric-card">
+      <span>Total de Pessoas</span>
+      <strong>{{ pessoas.length }}</strong>
+      <small>Base inicial via CSV</small>
     </div>
 
-    <div class="stat-card">
-      <span>Ativos</span>
-      <strong>0</strong>
+    <div class="metric-card success">
+      <span>Disponíveis</span>
+      <strong>{{ pessoasDisponiveis }}</strong>
+      <small>Aptas para compor equipes</small>
     </div>
 
-    <div class="stat-card">
+    <div class="metric-card warning">
       <span>Em Atendimento</span>
-      <strong>0</strong>
+      <strong>{{ pessoasEmAtendimento }}</strong>
+      <small>Já vinculadas a operação</small>
     </div>
 
-    <div class="stat-card">
-      <span>Setores</span>
-      <strong>0</strong>
-    </div>
   </div>
 
-  <div class="table-card">
-    <div class="table-header">
-      <h2>Equipe Cadastrada</h2>
-    </div>
+  <div class="people-grid">
 
-    <table>
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Cargo</th>
-          <th>Status</th>
-          <th>Contato</th>
-        </tr>
-      </thead>
+    @for (pessoa of pessoas; track pessoa.id) {
 
-      <tbody>
-        @for (pessoa of pessoas; track pessoa.nome) {
-          <tr>
-            <td><strong>{{ pessoa.nome }}</strong></td>
-            <td>{{ pessoa.cargo }}</td>
-            <td>
-              <span
-                class="status"
-                [class.available]="pessoa.status === 'Ativo'"
-                [class.attending]="pessoa.status === 'Em atendimento'"
-              >
-                {{ pessoa.status }}
-              </span>
-            </td>
-            <td>{{ pessoa.contato }}</td>
-          </tr>
-        }
-      </tbody>
-    </table>
+      <div class="person-card">
+
+        <div class="person-avatar">
+          {{ pessoa.nome.charAt(0) }}
+        </div>
+
+        <div class="person-info">
+          <div class="person-top">
+            <div>
+              <h2>{{ pessoa.nome }}</h2>
+              <span>{{ pessoa.cargo }}</span>
+            </div>
+
+            <small [class]="'status-pill ' + classeStatus(pessoa.status)">
+              {{ traduzirStatus(pessoa.status) }}
+            </small>
+          </div>
+
+          <div class="person-contact">
+            <span>
+              <i class="bi bi-telephone"></i>
+              {{ pessoa.telefone }}
+            </span>
+
+            <span>
+              <i class="bi bi-envelope"></i>
+              {{ pessoa.email }}
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+    } @empty {
+
+      <div class="empty-state">
+        Nenhuma pessoa encontrada na base do backend.
+      </div>
+
+    }
+
   </div>
 
 </section>

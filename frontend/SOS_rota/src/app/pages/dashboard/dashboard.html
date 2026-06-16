@@ -92,9 +92,24 @@
               {{ traduzirPrioridade(ocorrencia.prioridade) }}
             </span>
 
-            <span class="status">
+            <span class="status" [class.status-closed]="!ocorrenciaEstaAberta(ocorrencia)">
               {{ traduzirStatus(ocorrencia.status) }}
             </span>
+
+            @if (ocorrenciaEstaAberta(ocorrencia)) {
+            <button class="finish-occurrence-btn" type="button" (click)="finalizarOcorrencia(ocorrencia)"
+              [disabled]="finalizandoOcorrenciaId === ocorrencia.id">
+              <i class="bi bi-check2-circle"></i>
+
+              <span>
+                {{
+                finalizandoOcorrenciaId === ocorrencia.id
+                ? 'Finalizando...'
+                : 'Finalizar'
+                }}
+              </span>
+            </button>
+            }
           </div>
         </div>
 
