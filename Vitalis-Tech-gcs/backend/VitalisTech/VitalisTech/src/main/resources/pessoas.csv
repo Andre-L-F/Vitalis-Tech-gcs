@@ -1,0 +1,13 @@
+id,nome,cargo,telefone,email,status
+1,Ana Ribeiro,Médica,(62) 98111-2345,ana.ribeiro@sosrota.com,DISPONIVEL
+2,Carlos Mendes,Condutor Socorrista,(62) 98222-3456,carlos.mendes@sosrota.com,DISPONIVEL
+3,Juliana Prado,Enfermeira,(62) 98333-4567,juliana.prado@sosrota.com,DISPONIVEL
+4,Marcos Vinícius,Técnico em Enfermagem,(62) 98444-5678,marcos.vinicius@sosrota.com,EM_ATENDIMENTO
+5,Fernanda Lima,Médica,(62) 98555-6789,fernanda.lima@sosrota.com,DISPONIVEL
+6,Roberto Alves,Condutor Socorrista,(62) 98666-7890,roberto.alves@sosrota.com,DISPONIVEL
+7,Patrícia Gomes,Enfermeira,(62) 98777-8901,patricia.gomes@sosrota.com,INDISPONIVEL
+8,Diego Martins,Técnico em Enfermagem,(62) 98888-9012,diego.martins@sosrota.com,DISPONIVEL
+9,Camila Torres,Médica,(62) 98999-0123,camila.torres@sosrota.com,EM_ATENDIMENTO
+10,Lucas Ferreira,Condutor Socorrista,(62) 98000-1234,lucas.ferreira@sosrota.com,DISPONIVEL
+11,Beatriz Castro,Enfermeira,(62) 98123-4567,beatriz.castro@sosrota.com,DISPONIVEL
+12,Rafael Nunes,Técnico em Enfermagem,(62) 98234-5678,rafael.nunes@sosrota.com,DISPONIVEL
