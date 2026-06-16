@@ -1,11 +1,22 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { catchError, forkJoin, map, of } from 'rxjs';
 
 import { OcorrenciaService } from '../../services/ocorrencia';
 import { CriarOcorrencia } from '../../models/ocorrencia.model';
 
 import { AmbulanciaService } from '../../services/ambulancia';
 import { Recurso } from '../../models/recurso.model';
+
+import { RotaService } from '../../services/rota';
+import { Bairro, ResultadoRota } from '../../models/rota.model';
+
+interface SugestaoRecurso {
+  recurso: Recurso;
+  origem: Bairro;
+  destino: Bairro;
+  resultado: ResultadoRota;
+}
 
 @Component({
   selector: 'app-nova-ocorrencia',
@@ -16,14 +27,23 @@ import { Recurso } from '../../models/recurso.model';
 export class NovaOcorrencia implements OnInit {
   private ocorrenciaService = inject(OcorrenciaService);
   private ambulanciaService = inject(AmbulanciaService);
+  private rotaService = inject(RotaService);
   private cdr = inject(ChangeDetectorRef);
 
   carregando = false;
+  calculandoRecurso = false;
 
   mensagemErro = '';
   mensagemSucesso = '';
+  mensagemSugestao = '';
+
+  bairros: Bairro[] = [];
+  cidadeFixa = 'Cidália';
 
   recursosDisponiveis: Recurso[] = [];
+
+  melhorRecursoSugerido: SugestaoRecurso | null = null;
+  sugestoesRecursos: SugestaoRecurso[] = [];
 
   origemChamado = '192 — SAMU';
   tipoOcorrencia = '';
@@ -37,7 +57,22 @@ export class NovaOcorrencia implements OnInit {
   ocorrencia: CriarOcorrencia = this.criarFormularioInicial();
 
   ngOnInit(): void {
+    this.carregarBairros();
     this.carregarRecursosDisponiveis();
+  }
+
+  carregarBairros(): void {
+    this.rotaService.listarBairros().subscribe({
+      next: (dados) => {
+        this.bairros = dados;
+        this.cdr.detectChanges();
+      },
+      error: (erro) => {
+        console.error('Erro ao carregar bairros:', erro);
+        this.mensagemErro = 'Erro ao carregar bairros do mapa tático.';
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   carregarRecursosDisponiveis(): void {
@@ -47,10 +82,103 @@ export class NovaOcorrencia implements OnInit {
           (recurso) => recurso.status === 'DISPONIVEL'
         );
 
+        if (this.ocorrencia.bairro) {
+          this.calcularMelhorRecurso();
+        }
+
         this.cdr.detectChanges();
       },
       error: (erro) => {
         console.error('Erro ao carregar recursos disponíveis:', erro);
+      }
+    });
+  }
+
+  aoAlterarBairro(): void {
+    this.melhorRecursoSugerido = null;
+    this.sugestoesRecursos = [];
+    this.mensagemSugestao = '';
+
+    if (!this.ocorrencia.bairro) {
+      this.cdr.detectChanges();
+      return;
+    }
+
+    this.calcularMelhorRecurso();
+  }
+
+  calcularMelhorRecurso(): void {
+    this.mensagemErro = '';
+    this.mensagemSugestao = '';
+    this.melhorRecursoSugerido = null;
+    this.sugestoesRecursos = [];
+
+    if (!this.ocorrencia.bairro) {
+      return;
+    }
+
+    const destino = this.buscarBairroPorNome(this.ocorrencia.bairro);
+
+    if (!destino) {
+      this.mensagemSugestao = `O bairro "${this.ocorrencia.bairro}" não existe no grafo.`;
+      this.cdr.detectChanges();
+      return;
+    }
+
+    const recursosComBase = this.recursosDisponiveis.filter(
+      (recurso) => recurso.baseAlocacao
+    );
+
+    if (recursosComBase.length === 0) {
+      this.mensagemSugestao = 'Nenhum recurso disponível com base operacional cadastrada.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    const calculos = recursosComBase.map((recurso) => {
+      const origem = this.buscarBairroPorNome(recurso.baseAlocacao);
+
+      if (!origem) {
+        return of(null);
+      }
+
+      return this.rotaService.calcularCaminho(origem.id, destino.id).pipe(
+        map((resultado) => ({
+          recurso,
+          origem,
+          destino,
+          resultado
+        } as SugestaoRecurso)),
+        catchError(() => of(null))
+      );
+    });
+
+    this.calculandoRecurso = true;
+    this.cdr.detectChanges();
+
+    forkJoin(calculos).subscribe({
+      next: (respostas) => {
+        const sugestoesValidas = respostas
+          .filter((item): item is SugestaoRecurso => !!item && item.resultado.encontrado)
+          .sort((a, b) => a.resultado.distanciaKm - b.resultado.distanciaKm);
+
+        this.sugestoesRecursos = sugestoesValidas;
+        this.melhorRecursoSugerido = sugestoesValidas[0] ?? null;
+
+        if (!this.melhorRecursoSugerido) {
+          this.mensagemSugestao = 'Não foi possível encontrar rota para os recursos disponíveis.';
+        }
+
+        this.calculandoRecurso = false;
+        this.cdr.detectChanges();
+      },
+      error: (erro) => {
+        console.error('Erro ao calcular melhor recurso:', erro);
+
+        this.mensagemSugestao = 'Erro ao calcular o recurso mais próximo.';
+        this.calculandoRecurso = false;
+
+        this.cdr.detectChanges();
       }
     });
   }
@@ -85,8 +213,18 @@ export class NovaOcorrencia implements OnInit {
       return;
     }
 
-    if (!this.ocorrencia.cidade) {
-      this.exibirErro('Informe a cidade da ocorrência.');
+    if (!this.ocorrencia.bairro) {
+      this.exibirErro('Selecione o bairro da ocorrência.');
+      return;
+    }
+
+    if (this.calculandoRecurso) {
+      this.exibirErro('Aguarde o cálculo da ambulância mais próxima.');
+      return;
+    }
+
+    if (!this.melhorRecursoSugerido) {
+      this.exibirErro('Nenhum recurso disponível foi selecionado para esta ocorrência.');
       return;
     }
 
@@ -125,7 +263,7 @@ export class NovaOcorrencia implements OnInit {
       next: () => {
         this.carregando = false;
         this.limparFormulario();
-        this.mensagemSucesso = 'Ocorrência cadastrada com sucesso.';
+        this.mensagemSucesso = 'Ocorrência cadastrada.';
 
         this.cdr.detectChanges();
       },
@@ -162,6 +300,10 @@ export class NovaOcorrencia implements OnInit {
     this.vitimaSexo = 'Não informado';
     this.sintomas = '';
 
+    this.melhorRecursoSugerido = null;
+    this.sugestoesRecursos = [];
+    this.mensagemSugestao = '';
+
     this.ocorrencia = this.criarFormularioInicial();
 
     this.cdr.detectChanges();
@@ -173,7 +315,7 @@ export class NovaOcorrencia implements OnInit {
       descricao: '',
       endereco: '',
       bairro: null,
-      cidade: '',
+      cidade: this.cidadeFixa,
       cep: null,
       nomeSolicitante: '',
       cpfSolicitante: null,
@@ -192,7 +334,7 @@ export class NovaOcorrencia implements OnInit {
     this.ocorrencia.protocolo = this.ocorrencia.protocolo.trim().toUpperCase();
     this.ocorrencia.descricao = this.ocorrencia.descricao.trim();
     this.ocorrencia.endereco = this.ocorrencia.endereco.trim();
-    this.ocorrencia.cidade = this.ocorrencia.cidade.trim();
+    this.ocorrencia.cidade = this.cidadeFixa;
     this.ocorrencia.nomeSolicitante = this.ocorrencia.nomeSolicitante.trim();
 
     this.ocorrencia.bairro = this.valorOuNull(this.ocorrencia.bairro);
@@ -215,7 +357,17 @@ export class NovaOcorrencia implements OnInit {
     return valor.trim();
   }
 
+  private buscarBairroPorNome(nome: string): Bairro | null {
+    const nomeNormalizado = nome.trim().toLowerCase();
+
+    return this.bairros.find(
+      (bairro) => bairro.nome.trim().toLowerCase() === nomeNormalizado
+    ) ?? null;
+  }
+
   private montarDescricaoCompleta(): string {
+    const sugestao = this.melhorRecursoSugerido;
+
     const partes = [
       `Origem do chamado: ${this.origemChamado}`,
       `Tipo: ${this.tipoOcorrencia}`,
@@ -224,7 +376,12 @@ export class NovaOcorrencia implements OnInit {
       this.vitimaNome ? `Vítima: ${this.vitimaNome}` : '',
       this.vitimaIdade ? `Idade da vítima: ${this.vitimaIdade}` : '',
       this.vitimaSexo ? `Sexo da vítima: ${this.vitimaSexo}` : '',
-      this.pontoReferencia ? `Ponto de referência: ${this.pontoReferencia}` : ''
+      this.pontoReferencia ? `Ponto de referência: ${this.pontoReferencia}` : '',
+      sugestao ? `Recurso sugerido: ${sugestao.recurso.nome}` : '',
+      sugestao ? `Base do recurso: ${sugestao.origem.nome}` : '',
+      sugestao ? `Destino: ${sugestao.destino.nome}` : '',
+      sugestao ? `Distância: ${sugestao.resultado.distanciaKm} km` : '',
+      sugestao ? `Rota Dijkstra: ${sugestao.resultado.rota}` : ''
     ];
 
     return partes.filter(Boolean).join(' | ');
