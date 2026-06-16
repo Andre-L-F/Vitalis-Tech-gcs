@@ -59,7 +59,7 @@
 
   <div class="dashboard-grid">
 
-    <div class="panel occurrences-panel">
+    <div class="panel occurrences-panel" id="ocorrencias">
 
       <div class="panel-header">
         <div>
@@ -74,29 +74,35 @@
 
         @for (ocorrencia of ocorrenciasRecentes; track ocorrencia.id) {
 
-          <div class="occurrence-item">
-            <div class="occurrence-main">
-              <strong>{{ ocorrencia.protocolo }}</strong>
-              <span>{{ ocorrencia.descricao }}</span>
-              <small>{{ ocorrencia.endereco }} • {{ ocorrencia.cidade }}</small>
-            </div>
-
-            <div class="occurrence-tags">
-              <span class="priority">
-                {{ traduzirPrioridade(ocorrencia.prioridade) }}
-              </span>
-
-              <span class="status">
-                {{ traduzirStatus(ocorrencia.status) }}
-              </span>
-            </div>
+        <div class="occurrence-item">
+          <div class="occurrence-main">
+            <strong>{{ ocorrencia.protocolo }}</strong>
+            <span>{{ ocorrencia.descricao }}</span>
+            <small>
+              {{ ocorrencia.endereco }}
+              •
+              {{ ocorrencia.bairro || 'Bairro não informado' }}
+              •
+              {{ ocorrencia.cidade }}
+            </small>
           </div>
+
+          <div class="occurrence-tags">
+            <span [class]="'priority ' + classePrioridade(ocorrencia.prioridade)">
+              {{ traduzirPrioridade(ocorrencia.prioridade) }}
+            </span>
+
+            <span class="status">
+              {{ traduzirStatus(ocorrencia.status) }}
+            </span>
+          </div>
+        </div>
 
         } @empty {
 
-          <div class="empty-state">
-            Nenhuma ocorrência cadastrada ainda.
-          </div>
+        <div class="empty-state">
+          Nenhuma ocorrência cadastrada ainda.
+        </div>
 
         }
 
@@ -119,20 +125,21 @@
 
         @for (recurso of recursosRecentes; track recurso.id) {
 
-          <div class="compact-item">
-            <div>
-              <strong>{{ recurso.nome }}</strong>
-              <span>{{ recurso.tipo }} • {{ recurso.placa }}</span>
-            </div>
-
-            <small>{{ traduzirStatus(recurso.status) }}</small>
+        <div class="compact-item">
+          <div>
+            <strong>{{ recurso.nome }}</strong>
+            <span>{{ recurso.tipo }} • {{ recurso.placa }}</span>
+            <small>Base: {{ recurso.baseAlocacao || 'Não informada' }}</small>
           </div>
+
+          <small>{{ traduzirStatus(recurso.status) }}</small>
+        </div>
 
         } @empty {
 
-          <div class="empty-state">
-            Nenhum recurso cadastrado.
-          </div>
+        <div class="empty-state">
+          Nenhum recurso cadastrado.
+        </div>
 
         }
 
@@ -155,22 +162,116 @@
 
         @for (equipe of equipesRecentes; track equipe.id) {
 
-          <div class="compact-item">
-            <div>
-              <strong>{{ equipe.nome }}</strong>
-              <span>{{ equipe.responsavel }}</span>
-            </div>
-
-            <small>{{ traduzirStatus(equipe.status) }}</small>
+        <div class="compact-item">
+          <div>
+            <strong>{{ equipe.nome }}</strong>
+            <span>{{ equipe.responsavel }}</span>
           </div>
+
+          <small>{{ traduzirStatus(equipe.status) }}</small>
+        </div>
 
         } @empty {
 
-          <div class="empty-state">
-            Nenhuma equipe cadastrada.
-          </div>
+        <div class="empty-state">
+          Nenhuma equipe cadastrada.
+        </div>
 
         }
+
+      </div>
+
+    </div>
+
+    <div class="panel tactical-map-panel" id="mapa">
+
+      <div class="panel-header">
+        <div>
+          <span class="eyebrow">MAPA TÁTICO</span>
+          <h2>Cidália — Grafo Operacional</h2>
+        </div>
+
+        <span class="map-mode">
+          {{ bairrosMapa.length }} bairros • {{ conexoesMapa.length }} conexões
+        </span>
+      </div>
+
+      <div class="city-map-wrapper">
+
+        <svg class="city-map-svg" viewBox="0 0 800 600" role="img" aria-label="Mapa tático de Cidália">
+
+          <g class="map-edges">
+
+            @for (conexao of conexoesMapa; track conexao.origem + '-' + conexao.destino) {
+
+            <line class="map-edge" [attr.x1]="obterPonto(conexao.origem).x" [attr.y1]="obterPonto(conexao.origem).y"
+              [attr.x2]="obterPonto(conexao.destino).x" [attr.y2]="obterPonto(conexao.destino).y">
+              <title>
+                {{ obterPonto(conexao.origem).nome }}
+                →
+                {{ obterPonto(conexao.destino).nome }}
+                •
+                {{ conexao.distancia }} km
+              </title>
+            </line>
+
+            }
+
+          </g>
+
+          <g class="map-nodes">
+
+            @for (bairro of bairrosMapa; track bairro.id) {
+
+            <g class="map-node" [class.node-resource]="bairroTemRecursoDisponivel(bairro.nome)"
+              [class.node-occurrence]="bairroTemOcorrenciaAberta(bairro.nome)"
+              [attr.transform]="'translate(' + bairro.x + ',' + bairro.y + ')'">
+
+              <circle r="13"></circle>
+
+              <text class="map-node-id" y="4" text-anchor="middle">
+                {{ bairro.id }}
+              </text>
+
+              <text class="map-node-label" y="32" text-anchor="middle">
+                {{ bairro.nome }}
+              </text>
+
+              <title>
+                {{ bairro.nome }}
+              </title>
+
+            </g>
+
+            }
+
+          </g>
+
+        </svg>
+
+        <div class="map-legend">
+
+          <span>
+            <i class="legend-dot default"></i>
+            Bairro
+          </span>
+
+          <span>
+            <i class="legend-dot resource"></i>
+            Ambulância disponível
+          </span>
+
+          <span>
+            <i class="legend-dot occurrence"></i>
+            Ocorrência aberta
+          </span>
+
+          <span>
+            <i class="legend-line"></i>
+            Caminho do grafo
+          </span>
+
+        </div>
 
       </div>
 
