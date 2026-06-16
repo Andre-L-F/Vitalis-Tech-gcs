@@ -7,10 +7,7 @@
       <p>Gerenciamento das equipes operacionais cadastradas.</p>
     </div>
 
-    <button
-      class="btn-primary"
-      (click)="abrirModal()"
-    >
+    <button class="btn-primary" (click)="abrirModal()">
       <i class="bi bi-plus-circle"></i>
       Nova Equipe
     </button>
@@ -64,58 +61,51 @@
 
         @for (equipe of equipes; track equipe.id) {
 
-          <tr>
+        <tr>
 
-            <td>
-              <strong>{{ equipe.nome }}</strong>
-            </td>
+          <td>
+            <strong>{{ equipe.nome }}</strong>
+          </td>
 
-            <td>
-              {{ equipe.responsavel }}
-            </td>
+          <td>
+            {{ equipe.responsavel }}
+          </td>
 
-            <td>
-              {{ equipe.telefoneContato }}
-            </td>
+          <td>
+            {{ equipe.telefoneContato }}
+          </td>
 
-            <td>
-              {{ equipe.email }}
-            </td>
+          <td>
+            {{ equipe.email }}
+          </td>
 
-            <td>
-              {{ equipe.localizacaoAtual }}
-            </td>
+          <td>
+            {{ equipe.localizacaoAtual }}
+          </td>
 
-            <td>
-              <span
-                class="status"
-                [class.available]="equipe.status === 'DISPONIVEL'"
-                [class.moving]="equipe.status === 'EM_SAIDA'"
-                [class.attending]="equipe.status === 'EM_ATENDIMENTO'"
-                [class.unavailable]="equipe.status === 'INDISPONIVEL'"
-              >
-                {{ traduzirStatus(equipe.status) }}
-              </span>
-            </td>
+          <td>
+            <span class="status" [class.available]="equipe.status === 'DISPONIVEL'"
+              [class.moving]="equipe.status === 'EM_SAIDA'" [class.attending]="equipe.status === 'EM_ATENDIMENTO'"
+              [class.unavailable]="equipe.status === 'INDISPONIVEL'">
+              {{ traduzirStatus(equipe.status) }}
+            </span>
+          </td>
 
-            <td>
-              <button
-                class="btn-delete"
-                (click)="excluirEquipe(equipe.id)"
-              >
-                Excluir
-              </button>
-            </td>
+          <td>
+            <button class="btn-delete" (click)="excluirEquipe(equipe.id)">
+              Excluir
+            </button>
+          </td>
 
-          </tr>
+        </tr>
 
         } @empty {
 
-          <tr>
-            <td colspan="7" class="empty-state">
-              Nenhuma equipe cadastrada.
-            </td>
-          </tr>
+        <tr>
+          <td colspan="7" class="empty-state">
+            Nenhuma equipe cadastrada.
+          </td>
+        </tr>
 
         }
 
@@ -127,133 +117,96 @@
 
   @if (modalAberto) {
 
-    <div
-      class="modal-overlay"
-      (click)="fecharModal()"
-    >
+  <div class="modal-overlay" (click)="fecharModal()">
 
-      <div
-        class="modal-panel"
-        (click)="$event.stopPropagation()"
-      >
+    <div class="modal-panel" (click)="$event.stopPropagation()">
 
-        <div class="modal-header">
+      <div class="modal-header">
 
-          <h2>Nova Equipe</h2>
+        <h2>Nova Equipe</h2>
 
-          <button
-            class="close-btn"
-            (click)="fecharModal()"
-          >
-            <i class="bi bi-x-lg"></i>
-          </button>
+        <button class="close-btn" (click)="fecharModal()">
+          <i class="bi bi-x-lg"></i>
+        </button>
 
-        </div>
+      </div>
 
-        <div class="form-group">
+      <div class="form-group">
 
-          <label>Nome da Equipe</label>
+        <label>Nome da Equipe</label>
 
-          <input
-            type="text"
-            placeholder="Ex.: EQUIPE ALFA"
-            style="text-transform: uppercase"
-            [(ngModel)]="novaEquipe.nome"
-          />
+        <input type="text" placeholder="Ex.: EQUIPE ALFA" style="text-transform: uppercase"
+          [(ngModel)]="novaEquipe.nome" />
 
-        </div>
+      </div>
 
-        <div class="form-group">
+      <div class="form-group">
+        <label>Responsável</label>
 
-          <label>Responsável</label>
+        <select [(ngModel)]="pessoaResponsavelId" (ngModelChange)="aoSelecionarResponsavel()">
+          <option [ngValue]="null">Selecione o responsável...</option>
 
-          <input
-            type="text"
-            placeholder="Ex.: Dr. Rafael Martins"
-            [(ngModel)]="novaEquipe.responsavel"
-          />
+          @for (pessoa of pessoas; track pessoa.id) {
+          <option [ngValue]="pessoa.id">
+            {{ pessoa.nome }} — {{ pessoa.cargo }}
+          </option>
+          }
+        </select>
 
-        </div>
+      </div>
 
-        <div class="form-group">
+      <div class="form-group">
 
-          <label>Telefone</label>
+        <label>Telefone</label>
 
-          <input
-            type="text"
-            placeholder="Ex.: (11) 98765-4321"
-            [(ngModel)]="novaEquipe.telefoneContato"
-          />
+        <input type="text" placeholder="Ex.: (11) 98765-4321" [(ngModel)]="novaEquipe.telefoneContato" />
 
-          <small class="field-hint">
-            Use o formato brasileiro: (11) 98765-4321.
-          </small>
+        <small class="field-hint">
+          Use o formato brasileiro: (11) 98765-4321.
+        </small>
 
-        </div>
+      </div>
 
-        <div class="form-group">
+      <div class="form-group">
 
-          <label>E-mail</label>
+        <label>E-mail</label>
 
-          <input
-            type="email"
-            placeholder="Ex.: equipe.alfa@vitalis.com"
-            [(ngModel)]="novaEquipe.email"
-          />
+        <input type="email" placeholder="Ex.: equipe.alfa@vitalis.com" [(ngModel)]="novaEquipe.email" />
 
-        </div>
+      </div>
 
-        <div class="form-group">
+      <div class="form-group">
 
-          <label>Localização Atual</label>
+        <label>Status</label>
 
-          <input
-            type="text"
-            placeholder="Ex.: Base Central"
-            [(ngModel)]="novaEquipe.localizacaoAtual"
-          />
+        <select [(ngModel)]="novaEquipe.status">
+          <option value="DISPONIVEL">Disponível</option>
+          <option value="EM_SAIDA">Em Saída</option>
+          <option value="EM_ATENDIMENTO">Em Atendimento</option>
+          <option value="INDISPONIVEL">Indisponível</option>
+        </select>
 
-        </div>
+      </div>
 
-        <div class="form-group">
+      <div class="modal-actions">
 
-          <label>Status</label>
+        <button class="btn-secondary" (click)="fecharModal()">
+          Cancelar
+        </button>
 
-          <select [(ngModel)]="novaEquipe.status">
-            <option value="DISPONIVEL">Disponível</option>
-            <option value="EM_SAIDA">Em Saída</option>
-            <option value="EM_ATENDIMENTO">Em Atendimento</option>
-            <option value="INDISPONIVEL">Indisponível</option>
-          </select>
-
-        </div>
-
-        <div class="modal-actions">
-
-          <button
-            class="btn-secondary"
-            (click)="fecharModal()"
-          >
-            Cancelar
-          </button>
-
-          <button
-            class="btn-primary"
-            (click)="salvarEquipe()"
-            [disabled]="carregando"
-          >
-            @if (carregando) {
-              Salvando...
-            } @else {
-              Salvar
-            }
-          </button>
-
-        </div>
+        <button class="btn-primary" (click)="salvarEquipe()" [disabled]="carregando">
+          @if (carregando) {
+          Salvando...
+          } @else {
+          Salvar
+          }
+        </button>
 
       </div>
 
     </div>
+
+  </div>
 
   }
 
