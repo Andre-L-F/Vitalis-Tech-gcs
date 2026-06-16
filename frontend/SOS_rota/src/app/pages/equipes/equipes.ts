@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
+import { PessoaService } from '../../services/pessoa';
+import { Pessoa } from '../../models/pessoa.model';
 import { EquipeService } from '../../services/equipe';
 import { CriarEquipe, Equipe } from '../../models/equipe.model';
 
@@ -13,9 +14,10 @@ import { CriarEquipe, Equipe } from '../../models/equipe.model';
 export class Equipes implements OnInit {
   private equipeService = inject(EquipeService);
   private cdr = inject(ChangeDetectorRef);
-
+  private pessoaService = inject(PessoaService);
   equipes: Equipe[] = [];
-
+  pessoas: Pessoa[] = [];
+  pessoaResponsavelId: Pessoa | null = null;
   modalAberto = false;
   carregando = false;
 
@@ -30,6 +32,7 @@ export class Equipes implements OnInit {
 
   ngOnInit(): void {
     this.carregarEquipes();
+    this.carregarPessoas();
   }
 
   carregarEquipes(): void {
@@ -44,6 +47,37 @@ export class Equipes implements OnInit {
     });
   }
 
+  carregarPessoas(): void {
+    this.pessoaService.listar().subscribe({
+      next: (dados) => {
+        this.pessoas = dados.filter(
+          (pessoa) => pessoa.status === 'DISPONIVEL'
+        );
+
+        this.cdr.detectChanges();
+      },
+      error: (erro) => {
+        console.error('Erro ao carregar pessoas:', erro);
+      }
+    });
+  }
+
+  aoSelecionarResponsavel(): void {
+    const pessoa = this.pessoas.find(
+      (item) => item.id === Number(this.pessoaResponsavelId)
+    );
+
+    if (!pessoa) {
+      this.novaEquipe.responsavel = '';
+      return;
+    }
+
+    this.novaEquipe.responsavel = pessoa.nome;
+    this.novaEquipe.telefoneContato = pessoa.telefone;
+    this.novaEquipe.email = pessoa.email;
+
+    this.cdr.detectChanges();
+  }
   abrirModal(): void {
     this.modalAberto = true;
     this.cdr.detectChanges();
@@ -51,7 +85,7 @@ export class Equipes implements OnInit {
 
   fecharModal(): void {
     this.modalAberto = false;
-
+    this.pessoaResponsavelId = null;
     this.novaEquipe = {
       nome: '',
       responsavel: '',
