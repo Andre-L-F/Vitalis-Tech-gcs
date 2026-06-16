@@ -7,10 +7,7 @@
       <p>Gerenciamento dos recursos operacionais cadastrados.</p>
     </div>
 
-    <button
-      class="btn-primary"
-      (click)="abrirModal()"
-    >
+    <button class="btn-primary" (click)="abrirModal()">
       <i class="bi bi-plus-circle"></i>
       Novo Recurso
     </button>
@@ -63,53 +60,47 @@
 
         @for (ambulancia of ambulancias; track ambulancia.id) {
 
-          <tr>
+        <tr>
 
-            <td>
-              <strong>{{ ambulancia.nome }}</strong>
-            </td>
+          <td>
+            <strong>{{ ambulancia.nome }}</strong>
+          </td>
 
-            <td>
-              {{ traduzirTipo(ambulancia.tipo) }}
-            </td>
+          <td>
+            {{ traduzirTipo(ambulancia.tipo) }}
+          </td>
 
-            <td>
-              {{ ambulancia.placa }}
-            </td>
+          <td>
+            {{ ambulancia.placa }}
+          </td>
 
-            <td>
-              <span
-                class="status"
-                [class.available]="ambulancia.status === 'DISPONIVEL'"
-                [class.attending]="ambulancia.status === 'EM_USO'"
-                [class.maintenance]="ambulancia.status === 'MANUTENCAO'"
-              >
-                {{ traduzirStatus(ambulancia.status) }}
-              </span>
-            </td>
+          <td>
+            <span class="status" [class.available]="ambulancia.status === 'DISPONIVEL'"
+              [class.attending]="ambulancia.status === 'EM_USO'"
+              [class.maintenance]="ambulancia.status === 'MANUTENCAO'">
+              {{ traduzirStatus(ambulancia.status) }}
+            </span>
+          </td>
 
-            <td>
-              {{ ambulancia.baseAlocacao }}
-            </td>
+          <td>
+            {{ ambulancia.baseAlocacao }}
+          </td>
 
-            <td>
-              <button
-                class="btn-delete"
-                (click)="excluirRecurso(ambulancia.id)"
-              >
-                Excluir
-              </button>
-            </td>
+          <td>
+            <button class="btn-delete" (click)="excluirRecurso(ambulancia.id)">
+              Excluir
+            </button>
+          </td>
 
-          </tr>
+        </tr>
 
         } @empty {
 
-          <tr>
-            <td colspan="6" class="empty-state">
-              Nenhum recurso operacional cadastrado.
-            </td>
-          </tr>
+        <tr>
+          <td colspan="6" class="empty-state">
+            Nenhum recurso operacional cadastrado.
+          </td>
+        </tr>
 
         }
 
@@ -121,123 +112,105 @@
 
   @if (modalAberto) {
 
-    <div
-      class="modal-overlay"
-      (click)="fecharModal()"
-    >
+  <div class="modal-overlay" (click)="fecharModal()">
 
-      <div
-        class="modal-panel"
-        (click)="$event.stopPropagation()"
-      >
+    <div class="modal-panel" (click)="$event.stopPropagation()">
 
-        <div class="modal-header">
+      <div class="modal-header">
 
-          <h2>Novo Recurso Operacional</h2>
+        <h2>Novo Recurso Operacional</h2>
 
-          <button
-            class="close-btn"
-            (click)="fecharModal()"
-          >
-            <i class="bi bi-x-lg"></i>
-          </button>
+        <button class="close-btn" (click)="fecharModal()">
+          <i class="bi bi-x-lg"></i>
+        </button>
 
-        </div>
+      </div>
 
-        <div class="form-group">
+      <div class="form-group">
 
-          <label>Nome</label>
+        <label>Nome</label>
 
-          <input
-            type="text"
-            placeholder="Ex.: USA-04"
-            style="text-transform: uppercase"
-            [(ngModel)]="novoRecurso.nome"
-          />
+        <input type="text" placeholder="Ex.: USA-04" style="text-transform: uppercase" [(ngModel)]="novoRecurso.nome" />
 
-        </div>
+      </div>
 
-        <div class="form-group">
+      <div class="form-group">
 
-          <label>Tipo</label>
+        <label>Tipo</label>
 
-          <select [(ngModel)]="novoRecurso.tipo">
-            <option value="AMBULANCIA">Ambulância</option>
-            <option value="VIATURA">Viatura</option>
-            <option value="MOTOLANCIA">Motolância</option>
-            <option value="APOIO">Apoio</option>
-          </select>
+        <select [(ngModel)]="novoRecurso.tipo">
+          <option value="AMBULANCIA">Ambulância</option>
+          <option value="VIATURA">Viatura</option>
+          <option value="MOTOLANCIA">Motolância</option>
+          <option value="APOIO">Apoio</option>
+        </select>
 
-        </div>
+      </div>
 
-        <div class="form-group">
+      <div class="form-group">
 
-          <label>Placa</label>
+        <label>Placa</label>
 
-          <input
-            type="text"
-            maxlength="7"
-            placeholder="Ex.: ABC1D23"
-            style="text-transform: uppercase"
-            [(ngModel)]="novoRecurso.placa"
-          />
+        <input type="text" maxlength="7" placeholder="Ex.: ABC1D23" style="text-transform: uppercase"
+          [(ngModel)]="novoRecurso.placa" />
 
-          <small class="field-hint">
-            Use o padrão Mercosul: AAA1A11.
-          </small>
+        <small class="field-hint">
+          Use o padrão Mercosul: AAA1A11.
+        </small>
 
-        </div>
+      </div>
 
-        <div class="form-group">
+      <div class="form-group">
 
-          <label>Status</label>
+        <label>Status</label>
 
-          <select [(ngModel)]="novoRecurso.status">
-            <option value="DISPONIVEL">Disponível</option>
-            <option value="EM_USO">Em Uso</option>
-            <option value="MANUTENCAO">Manutenção</option>
-          </select>
+        <select [(ngModel)]="novoRecurso.status">
+          <option value="DISPONIVEL">Disponível</option>
+          <option value="EM_USO">Em Uso</option>
+          <option value="MANUTENCAO">Manutenção</option>
+        </select>
 
-        </div>
+      </div>
 
-        <div class="form-group">
+      <div class="form-group">
 
-          <label>Base</label>
+        <label>Base / Bairro Operacional</label>
 
-          <input
-            type="text"
-            placeholder="Ex.: Base Central"
-            [(ngModel)]="novoRecurso.baseAlocacao"
-          />
+        <select [(ngModel)]="novoRecurso.baseAlocacao">
+          <option value="">Selecione a base...</option>
 
-        </div>
+          @for (bairro of bairros; track bairro.id) {
+          <option [value]="bairro.nome">
+            {{ bairro.nome }}
+          </option>
+          }
+        </select>
 
-        <div class="modal-actions">
+        <small class="field-hint">
+          A base deve ser um bairro do mapa tático.
+        </small>
 
-          <button
-            class="btn-secondary"
-            (click)="fecharModal()"
-          >
-            Cancelar
-          </button>
+      </div>
 
-          <button
-            class="btn-primary"
-            (click)="salvarRecurso()"
-            [disabled]="carregando"
-          >
-            @if (carregando) {
-              Salvando...
-            } @else {
-              Salvar
-            }
-          </button>
+      <div class="modal-actions">
 
-        </div>
+        <button class="btn-secondary" (click)="fecharModal()">
+          Cancelar
+        </button>
+
+        <button class="btn-primary" (click)="salvarRecurso()" [disabled]="carregando">
+          @if (carregando) {
+          Salvando...
+          } @else {
+          Salvar
+          }
+        </button>
 
       </div>
 
     </div>
+
+  </div>
 
   }
 

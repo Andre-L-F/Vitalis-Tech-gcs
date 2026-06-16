@@ -51,35 +51,23 @@
 
             <div class="priority-options">
 
-              <button
-                type="button"
-                [class.active]="ocorrencia.prioridade === 'CRITICA'"
-                (click)="selecionarPrioridade('CRITICA')"
-              >
+              <button type="button" [class.active]="ocorrencia.prioridade === 'CRITICA'"
+                (click)="selecionarPrioridade('CRITICA')">
                 P1 — Crítica
               </button>
 
-              <button
-                type="button"
-                [class.active]="ocorrencia.prioridade === 'ALTA'"
-                (click)="selecionarPrioridade('ALTA')"
-              >
+              <button type="button" [class.active]="ocorrencia.prioridade === 'ALTA'"
+                (click)="selecionarPrioridade('ALTA')">
                 P2 — Alta
               </button>
 
-              <button
-                type="button"
-                [class.active]="ocorrencia.prioridade === 'MEDIA'"
-                (click)="selecionarPrioridade('MEDIA')"
-              >
+              <button type="button" [class.active]="ocorrencia.prioridade === 'MEDIA'"
+                (click)="selecionarPrioridade('MEDIA')">
                 P3 — Média
               </button>
 
-              <button
-                type="button"
-                [class.active]="ocorrencia.prioridade === 'BAIXA'"
-                (click)="selecionarPrioridade('BAIXA')"
-              >
+              <button type="button" [class.active]="ocorrencia.prioridade === 'BAIXA'"
+                (click)="selecionarPrioridade('BAIXA')">
                 P4 — Baixa
               </button>
 
@@ -89,11 +77,8 @@
           <div class="form-group full-width">
             <label>Descrição da Ocorrência <span class="required">*</span></label>
 
-            <textarea
-              rows="4"
-              placeholder="Descreva o ocorrido relatado pelo solicitante..."
-              [(ngModel)]="ocorrencia.descricao"
-            ></textarea>
+            <textarea rows="4" placeholder="Descreva o ocorrido relatado pelo solicitante..."
+              [(ngModel)]="ocorrencia.descricao"></textarea>
           </div>
 
         </div>
@@ -110,21 +95,13 @@
           <div class="form-group">
             <label>Nome do Solicitante <span class="required">*</span></label>
 
-            <input
-              type="text"
-              placeholder="Nome completo"
-              [(ngModel)]="ocorrencia.nomeSolicitante"
-            >
+            <input type="text" placeholder="Nome completo" [(ngModel)]="ocorrencia.nomeSolicitante">
           </div>
 
           <div class="form-group">
             <label>Telefone</label>
 
-            <input
-              type="text"
-              placeholder="Ex.: (11) 98765-4321"
-              [(ngModel)]="ocorrencia.telefoneSolicitante"
-            >
+            <input type="text" placeholder="Ex.: (11) 98765-4321" [(ngModel)]="ocorrencia.telefoneSolicitante">
 
             <small class="field-hint">
               Opcional. Use o formato brasileiro.
@@ -134,11 +111,7 @@
           <div class="form-group">
             <label>CPF</label>
 
-            <input
-              type="text"
-              placeholder="Ex.: 123.456.789-00"
-              [(ngModel)]="ocorrencia.cpfSolicitante"
-            >
+            <input type="text" placeholder="Ex.: 123.456.789-00" [(ngModel)]="ocorrencia.cpfSolicitante">
 
             <small class="field-hint">
               Opcional.
@@ -148,21 +121,13 @@
           <div class="form-group">
             <label>Nome da Vítima</label>
 
-            <input
-              type="text"
-              placeholder="Nome da vítima, se diferente do solicitante"
-              [(ngModel)]="vitimaNome"
-            >
+            <input type="text" placeholder="Nome da vítima, se diferente do solicitante" [(ngModel)]="vitimaNome">
           </div>
 
           <div class="form-group">
             <label>Idade</label>
 
-            <input
-              type="number"
-              placeholder="00"
-              [(ngModel)]="vitimaIdade"
-            >
+            <input type="number" placeholder="00" [(ngModel)]="vitimaIdade">
           </div>
 
           <div class="form-group">
@@ -178,11 +143,7 @@
           <div class="form-group full-width">
             <label>Sintomas / Queixa Principal</label>
 
-            <input
-              type="text"
-              placeholder="Ex.: dor torácica intensa, tontura, sangramento..."
-              [(ngModel)]="sintomas"
-            >
+            <input type="text" placeholder="Ex.: dor torácica intensa, tontura, sangramento..." [(ngModel)]="sintomas">
           </div>
 
         </div>
@@ -199,55 +160,40 @@
           <div class="form-group full-width">
             <label>Endereço <span class="required">*</span></label>
 
-            <input
-              type="text"
-              placeholder="Digite o endereço da ocorrência"
-              [(ngModel)]="ocorrencia.endereco"
-            >
+            <input type="text" placeholder="Digite o endereço da ocorrência" [(ngModel)]="ocorrencia.endereco">
           </div>
-
           <div class="form-group">
-            <label>Bairro</label>
+            <label>Bairro <span class="required">*</span></label>
 
-            <input
-              type="text"
-              placeholder="Bairro"
-              [(ngModel)]="ocorrencia.bairro"
-            >
-          </div>
+            <select [(ngModel)]="ocorrencia.bairro" (ngModelChange)="aoAlterarBairro()">
+              <option [ngValue]="null">Selecione o bairro...</option>
 
-          <div class="form-group">
-            <label>Cidade <span class="required">*</span></label>
-
-            <input
-              type="text"
-              placeholder="Cidade"
-              [(ngModel)]="ocorrencia.cidade"
-            >
-          </div>
-
-          <div class="form-group">
-            <label>CEP</label>
-
-            <input
-              type="text"
-              placeholder="Ex.: 00000-000"
-              [(ngModel)]="ocorrencia.cep"
-            >
+              @for (bairro of bairros; track bairro.id) {
+              <option [value]="bairro.nome">
+                {{ bairro.nome }}
+              </option>
+              }
+            </select>
 
             <small class="field-hint">
-              Opcional. Use o formato 00000-000.
+              O bairro será usado pelo mapa tático para cálculo de rota.
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label>Cidade</label>
+
+            <input type="text" [value]="cidadeFixa" disabled>
+
+            <small class="field-hint">
+              Cidade operacional fixa do sistema.
             </small>
           </div>
 
           <div class="form-group">
             <label>Ponto de Referência</label>
 
-            <input
-              type="text"
-              placeholder="Ex.: próximo ao mercado, escola..."
-              [(ngModel)]="pontoReferencia"
-            >
+            <input type="text" placeholder="Ex.: próximo ao mercado, escola..." [(ngModel)]="pontoReferencia">
           </div>
 
         </div>
@@ -262,23 +208,75 @@
 
         @for (recurso of recursosDisponiveis; track recurso.id) {
 
-          <div class="resource-item">
-            <div>
-              <strong>{{ recurso.nome }}</strong>
-              <small>{{ recurso.tipo }} • {{ recurso.baseAlocacao }}</small>
-            </div>
-
-            <span>Disponível</span>
+        <div class="resource-item">
+          <div>
+            <strong>{{ recurso.nome }}</strong>
+            <small>{{ recurso.tipo }} • {{ recurso.baseAlocacao }}</small>
           </div>
+
+          <span>Disponível</span>
+        </div>
 
         } @empty {
 
-          <p class="resource-empty">
-            Nenhum recurso disponível no momento.
-          </p>
+        <p class="resource-empty">
+          Nenhum recurso disponível no momento.
+        </p>
 
         }
 
+      </div>
+
+      <div class="side-card suggested-resource-card">
+        <span class="side-label">AMBULÂNCIA SUGERIDA</span>
+
+        @if (calculandoRecurso) {
+
+        <p class="resource-empty">
+          Calculando menor rota com Dijkstra...
+        </p>
+
+        } @else if (melhorRecursoSugerido) {
+
+        <div class="suggested-resource">
+          <strong>{{ melhorRecursoSugerido.recurso.nome }}</strong>
+
+          <span>
+            {{ melhorRecursoSugerido.recurso.tipo }}
+            •
+            {{ melhorRecursoSugerido.recurso.placa }}
+          </span>
+
+          <small>
+            Base: {{ melhorRecursoSugerido.origem.nome }}
+          </small>
+
+          <small>
+            Destino: {{ melhorRecursoSugerido.destino.nome }}
+          </small>
+
+          <small>
+            Distância: {{ melhorRecursoSugerido.resultado.distanciaKm }} km
+          </small>
+
+          <small>
+            Rota: {{ melhorRecursoSugerido.resultado.rota }}
+          </small>
+        </div>
+
+        } @else {
+
+        <p class="resource-empty">
+          Selecione o bairro da ocorrência para sugerir o recurso mais próximo.
+        </p>
+
+        }
+
+        @if (mensagemSugestao) {
+        <p class="suggestion-warning">
+          {{ mensagemSugestao }}
+        </p>
+        }
       </div>
 
       <div class="side-card">
@@ -294,38 +292,29 @@
       <div class="side-card actions-card">
 
         @if (mensagemErro) {
-          <div class="form-message error">
-            {{ mensagemErro }}
-          </div>
+        <div class="form-message error">
+          {{ mensagemErro }}
+        </div>
         }
 
         @if (mensagemSucesso) {
-          <div class="form-message success">
-            {{ mensagemSucesso }}
-          </div>
+        <div class="form-message success">
+          {{ mensagemSucesso }}
+        </div>
         }
 
-        <button
-          class="btn-secondary"
-          type="button"
-          (click)="limparFormulario()"
-        >
+        <button class="btn-secondary" type="button" (click)="limparFormulario()">
           Cancelar
         </button>
 
-        <button
-  class="btn-primary"
-  type="button"
-  (mousedown)="$event.preventDefault()"
-  (click)="salvarOcorrencia()"
-  [disabled]="carregando"
->
-  <i class="bi bi-send"></i>
+        <button class="btn-primary" type="button" (mousedown)="$event.preventDefault()" (click)="salvarOcorrencia()"
+          [disabled]="carregando || calculandoRecurso">
+          <i class="bi bi-send"></i>
 
-  <span>
-    {{ carregando ? 'Despachando...' : 'Despachar Ocorrência' }}
-  </span>
-</button>
+          <span>
+            {{ carregando ? 'Despachando...' : 'Despachar Ocorrência' }}
+          </span>
+        </button>
 
       </div>
 

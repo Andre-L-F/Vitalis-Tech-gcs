@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
+import { RotaService } from '../../services/rota';
+import { Bairro } from '../../models/rota.model';
 import { AmbulanciaService } from '../../services/ambulancia';
 import { CriarRecurso, Recurso } from '../../models/recurso.model';
 
@@ -14,6 +15,10 @@ export class Ambulancias implements OnInit {
   private ambulanciaService = inject(AmbulanciaService);
   private cdr = inject(ChangeDetectorRef);
 
+  private rotaService = inject(RotaService);
+
+  bairros: Bairro[] = [];
+
   ambulancias: Recurso[] = [];
 
   modalAberto = false;
@@ -26,10 +31,22 @@ export class Ambulancias implements OnInit {
     status: 'DISPONIVEL',
     baseAlocacao: ''
   };
-
   ngOnInit(): void {
+    this.carregarBairros();
     this.carregarRecursos();
   }
+
+carregarBairros(): void {
+  this.rotaService.listarBairros().subscribe({
+    next: (dados) => {
+      this.bairros = dados;
+      this.cdr.detectChanges();
+    },
+    error: (erro) => {
+      console.error('Erro ao carregar bairros:', erro);
+    }
+  });
+}
 
   carregarRecursos(): void {
     this.ambulanciaService.listar().subscribe({
