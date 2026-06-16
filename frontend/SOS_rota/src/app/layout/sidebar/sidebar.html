@@ -15,73 +15,45 @@
 
     <p class="menu-title">Operação</p>
 
-    <a
-      routerLink="/ocorrencias/nova"
-      routerLinkActive="active"
-      class="emergency-link"
-    >
+    <a routerLink="/ocorrencias/nova" routerLinkActive="active" class="emergency-link">
       <i class="bi bi-plus-circle"></i>
       Nova Ocorrência
     </a>
 
-    <a
-      routerLink="/"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-    >
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       <i class="bi bi-speedometer2"></i>
       Painel Operacional
     </a>
 
-    <a
-      routerLink="/equipes"
-      routerLinkActive="active"
-    >
+    <a routerLink="/equipes" routerLinkActive="active">
       <i class="bi bi-people"></i>
       Equipes
     </a>
 
-    <a
-      routerLink="/ambulancias"
-      routerLinkActive="active"
-    >
+    <a routerLink="/ambulancias" routerLinkActive="active">
       <i class="bi bi-truck"></i>
       Ambulâncias
     </a>
 
-    <a
-      routerLink="/pessoas"
-      routerLinkActive="active"
-    >
+    <a routerLink="/pessoas" routerLinkActive="active">
       <i class="bi bi-person-badge"></i>
       Pessoas
     </a>
 
     <p class="menu-title">Painel & Relatórios</p>
 
-    <a
-      href="#ocorrencias"
-      (click)="scrollToSection('ocorrencias', $event)"
-      [class.section-active]="activeSection === 'ocorrencias'"
-    >
+    <a href="#ocorrencias" (click)="scrollToSection('ocorrencias', $event)"
+      [class.section-active]="activeSection === 'ocorrencias'">
       <i class="bi bi-exclamation-triangle"></i>
       Ocorrências
     </a>
 
-    <a
-      href="#mapa"
-      (click)="scrollToSection('mapa', $event)"
-      [class.section-active]="activeSection === 'mapa'"
-    >
-      <i class="bi bi-geo-alt"></i>
-      Mapa Tático
+    <a routerLink="/mapa-tatico" routerLinkActive="active">
+      <i class="bi bi-geo-alt"></i> Mapa Tático
     </a>
 
-    <a
-      href="#indicadores"
-      (click)="scrollToSection('indicadores', $event)"
-      [class.section-active]="activeSection === 'indicadores'"
-    >
+    <a href="#indicadores" (click)="scrollToSection('indicadores', $event)"
+      [class.section-active]="activeSection === 'indicadores'">
       <i class="bi bi-bar-chart"></i>
       Indicadores
     </a>
