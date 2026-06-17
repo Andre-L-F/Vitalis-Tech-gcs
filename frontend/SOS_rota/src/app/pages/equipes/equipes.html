@@ -7,7 +7,11 @@
       <p>Gerenciamento das equipes operacionais cadastradas.</p>
     </div>
 
-    <button class="btn-primary" (click)="abrirModal()">
+    <button
+      class="btn-primary"
+      type="button"
+      (click)="abrirModal()"
+    >
       <i class="bi bi-plus-circle"></i>
       Nova Equipe
     </button>
@@ -48,9 +52,10 @@
       <thead>
         <tr>
           <th>Nome</th>
-          <th>Responsável</th>
-          <th>Telefone</th>
-          <th>E-mail</th>
+          <th>Tipo</th>
+          <th>Líder</th>
+          <th>Composição</th>
+          <th>Contato</th>
           <th>Localização</th>
           <th>Status</th>
           <th>Ações</th>
@@ -61,51 +66,92 @@
 
         @for (equipe of equipes; track equipe.id) {
 
-        <tr>
+          <tr>
 
-          <td>
-            <strong>{{ equipe.nome }}</strong>
-          </td>
+            <td>
+              <strong>{{ equipe.nome }}</strong>
+            </td>
 
-          <td>
-            {{ equipe.responsavel }}
-          </td>
+            <td>
+              <span class="team-type">
+                {{ tipoDaEquipe(equipe) }}
+              </span>
+            </td>
 
-          <td>
-            {{ equipe.telefoneContato }}
-          </td>
+            <td>
+              {{ equipe.responsavel }}
+            </td>
 
-          <td>
-            {{ equipe.email }}
-          </td>
+            <td>
+              <div class="members-cell">
+                <strong>{{ quantidadeMembrosDaEquipe(equipe) }} membro(s)</strong>
+                <small>{{ nomesMembrosDaEquipe(equipe) }}</small>
+              </div>
+            </td>
 
-          <td>
-            {{ equipe.localizacaoAtual }}
-          </td>
+            <td>
+              <div class="contact-cell">
+                <span>{{ equipe.telefoneContato }}</span>
+                <small>{{ equipe.email }}</small>
+              </div>
+            </td>
 
-          <td>
-            <span class="status" [class.available]="equipe.status === 'DISPONIVEL'"
-              [class.moving]="equipe.status === 'EM_SAIDA'" [class.attending]="equipe.status === 'EM_ATENDIMENTO'"
-              [class.unavailable]="equipe.status === 'INDISPONIVEL'">
-              {{ traduzirStatus(equipe.status) }}
-            </span>
-          </td>
+            <td>
+              <small class="team-location">
+                <i class="bi bi-geo-alt"></i>
+                Cidália
+              </small>
+            </td>
 
-          <td>
-            <button class="btn-delete" (click)="excluirEquipe(equipe.id)">
-              Excluir
-            </button>
-          </td>
+            <td>
+              <span
+                class="status"
+                [class.available]="equipe.status === 'DISPONIVEL'"
+                [class.moving]="equipe.status === 'EM_SAIDA'"
+                [class.attending]="equipe.status === 'EM_ATENDIMENTO'"
+                [class.unavailable]="equipe.status === 'INDISPONIVEL'"
+              >
+                {{ traduzirStatus(equipe.status) }}
+              </span>
+            </td>
 
-        </tr>
+            <td>
+              <div class="actions-cell">
+                <button
+                  class="btn-edit"
+                  type="button"
+                  (click)="editarEquipe(equipe)"
+                >
+                  <i class="bi bi-pencil-square"></i>
+                  Editar
+                </button>
+
+                <button
+                  class="btn-delete"
+                  type="button"
+                  (click)="excluirEquipe(equipe)"
+                  [disabled]="!podeExcluirEquipe(equipe)"
+                  [title]="
+                    podeExcluirEquipe(equipe)
+                      ? 'Excluir equipe'
+                      : 'Somente equipes disponíveis podem ser excluídas'
+                  "
+                >
+                  <i class="bi bi-trash"></i>
+                  Excluir
+                </button>
+              </div>
+            </td>
+
+          </tr>
 
         } @empty {
 
-        <tr>
-          <td colspan="7" class="empty-state">
-            Nenhuma equipe cadastrada.
-          </td>
-        </tr>
+          <tr>
+            <td colspan="8" class="empty-state">
+              Nenhuma equipe cadastrada.
+            </td>
+          </tr>
 
         }
 
@@ -117,96 +163,244 @@
 
   @if (modalAberto) {
 
-  <div class="modal-overlay" (click)="fecharModal()">
+    <div class="modal-overlay" (click)="fecharModal()">
 
-    <div class="modal-panel" (click)="$event.stopPropagation()">
+      <div class="modal-panel" (click)="$event.stopPropagation()">
 
-      <div class="modal-header">
+        <div class="modal-header">
 
-        <h2>Nova Equipe</h2>
+          <h2>
+            {{
+              equipeEditandoId !== null
+                ? 'Editar Equipe'
+                : 'Nova Equipe'
+            }}
+          </h2>
 
-        <button class="close-btn" (click)="fecharModal()">
-          <i class="bi bi-x-lg"></i>
-        </button>
+          <button
+            class="close-btn"
+            type="button"
+            (click)="fecharModal()"
+          >
+            <i class="bi bi-x-lg"></i>
+          </button>
 
-      </div>
+        </div>
 
-      <div class="form-group">
+        <div class="form-group">
 
-        <label>Nome da Equipe</label>
+          <label>Nome da Equipe</label>
 
-        <input type="text" placeholder="Ex.: EQUIPE ALFA" style="text-transform: uppercase"
-          [(ngModel)]="novaEquipe.nome" />
+          <input
+            type="text"
+            placeholder="Ex.: EQUIPE ALFA"
+            style="text-transform: uppercase"
+            [(ngModel)]="novaEquipe.nome"
+          />
 
-      </div>
+        </div>
 
-      <div class="form-group">
-        <label>Responsável</label>
+        <div class="form-group">
 
-        <select [(ngModel)]="pessoaResponsavelId" (ngModelChange)="aoSelecionarResponsavel()">
-          <option [ngValue]="null">Selecione o responsável...</option>
+          <label>Tipo de Equipe</label>
 
-          @for (pessoa of pessoas; track pessoa.id) {
-          <option [ngValue]="pessoa.id">
-            {{ pessoa.nome }} — {{ pessoa.cargo }}
-          </option>
-          }
-        </select>
+          <select [(ngModel)]="tipoEquipe">
+            <option value="PADRAO">Operacional — mínimo 2 pessoas</option>
+            <option value="MOTOLANCIA">Motolância — mínimo 1 pessoa</option>
+          </select>
 
-      </div>
+          <small class="field-hint">
+            Equipes operacionais precisam de no mínimo 2 pessoas. Motolância pode atuar com 1 pessoa.
+          </small>
 
-      <div class="form-group">
+        </div>
 
-        <label>Telefone</label>
+        <div class="form-group">
 
-        <input type="text" placeholder="Ex.: (11) 98765-4321" [(ngModel)]="novaEquipe.telefoneContato" />
+          <label>Membros da Equipe</label>
 
-        <small class="field-hint">
-          Use o formato brasileiro: (11) 98765-4321.
-        </small>
+          <div class="member-selector">
 
-      </div>
+            @for (pessoa of pessoas; track pessoa.id) {
 
-      <div class="form-group">
+              <label class="member-option">
+                <input
+                  type="checkbox"
+                  [checked]="pessoaEstaSelecionada(pessoa.id)"
+                  (change)="alternarMembro(pessoa.id, $event)"
+                />
 
-        <label>E-mail</label>
+                <span>
+                  <strong>{{ pessoa.nome }}</strong>
+                  <small>{{ pessoa.cargo }}</small>
+                </span>
+              </label>
 
-        <input type="email" placeholder="Ex.: equipe.alfa@vitalis.com" [(ngModel)]="novaEquipe.email" />
+            } @empty {
 
-      </div>
+              <div class="empty-members">
+                Nenhuma pessoa disponível para compor equipe.
+              </div>
 
-      <div class="form-group">
+            }
 
-        <label>Status</label>
+          </div>
 
-        <select [(ngModel)]="novaEquipe.status">
-          <option value="DISPONIVEL">Disponível</option>
-          <option value="EM_SAIDA">Em Saída</option>
-          <option value="EM_ATENDIMENTO">Em Atendimento</option>
-          <option value="INDISPONIVEL">Indisponível</option>
-        </select>
+          <small class="field-hint">
+            Selecione as pessoas que farão parte desta equipe.
+          </small>
 
-      </div>
+        </div>
 
-      <div class="modal-actions">
+        <div class="form-group">
 
-        <button class="btn-secondary" (click)="fecharModal()">
-          Cancelar
-        </button>
+          <label>Líder da Equipe</label>
 
-        <button class="btn-primary" (click)="salvarEquipe()" [disabled]="carregando">
-          @if (carregando) {
-          Salvando...
-          } @else {
-          Salvar
-          }
-        </button>
+          <select
+            [(ngModel)]="pessoaResponsavelId"
+            (ngModelChange)="aoSelecionarResponsavel()"
+          >
+            <option [ngValue]="null">Selecione o líder...</option>
+
+            @for (pessoa of pessoasSelecionadas(); track pessoa.id) {
+              <option [ngValue]="pessoa.id">
+                {{ pessoa.nome }} — {{ pessoa.cargo }}
+              </option>
+            }
+          </select>
+
+          <small class="field-hint">
+            O líder precisa estar entre os membros selecionados.
+          </small>
+
+        </div>
+
+        <div class="composition-summary">
+
+          <div>
+            <span>Membros selecionados</span>
+            <strong>{{ membrosSelecionadosIds.length }}</strong>
+          </div>
+
+          <small>
+            {{
+              tipoEquipe === 'MOTOLANCIA'
+                ? 'Regra: mínimo 1 pessoa para motolância.'
+                : 'Regra: mínimo 2 pessoas para equipe operacional.'
+            }}
+          </small>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Telefone</label>
+
+          <input
+            type="text"
+            placeholder="Ex.: (11) 98765-4321"
+            [(ngModel)]="novaEquipe.telefoneContato"
+            readonly
+          />
+
+          <small class="field-hint">
+            O telefone vem automaticamente do líder selecionado.
+          </small>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>E-mail</label>
+
+          <input
+            type="email"
+            placeholder="Ex.: equipe.alfa@vitalis.com"
+            [(ngModel)]="novaEquipe.email"
+            readonly
+          />
+
+          <small class="field-hint">
+            O e-mail vem automaticamente do líder selecionado.
+          </small>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Localização Atual</label>
+
+          <input
+            type="text"
+            value="Cidália"
+            readonly
+          />
+
+          <small class="field-hint">
+            Cidade operacional fixa do sistema.
+          </small>
+
+        </div>
+
+        @if (equipeEditandoId !== null) {
+
+          <div class="form-group">
+
+            <label>Status</label>
+
+            <select [(ngModel)]="novaEquipe.status">
+              <option value="DISPONIVEL">Disponível</option>
+              <option value="EM_SAIDA">Em Saída</option>
+              <option value="EM_ATENDIMENTO">Em Atendimento</option>
+              <option value="INDISPONIVEL">Indisponível</option>
+            </select>
+
+            <small class="field-hint">
+              O status só pode ser alterado na edição da equipe.
+            </small>
+
+          </div>
+
+        }
+
+        <div class="business-rule-box">
+          <i class="bi bi-shield-check"></i>
+
+          <span>
+            Equipes operacionais exigem pelo menos 2 pessoas. Motolância pode atuar com 1 pessoa. O líder deve fazer parte da composição.
+          </span>
+        </div>
+
+        <div class="modal-actions">
+
+          <button
+            class="btn-secondary"
+            type="button"
+            (click)="fecharModal()"
+          >
+            Cancelar
+          </button>
+
+          <button
+            class="btn-primary"
+            type="button"
+            (click)="salvarEquipe()"
+            [disabled]="carregando"
+          >
+            @if (carregando) {
+              Salvando...
+            } @else if (equipeEditandoId !== null) {
+              Salvar Alterações
+            } @else {
+              Cadastrar Equipe
+            }
+          </button>
+
+        </div>
 
       </div>
 
     </div>
-
-  </div>
 
   }
 

@@ -28,6 +28,10 @@ export class EquipeService {
     return this.http.post<Equipe>(this.apiUrl, equipe);
   }
 
+  atualizar(id: number, equipe: CriarEquipe): Observable<Equipe> {
+    return this.http.put<Equipe>(`${this.apiUrl}/${id}`, equipe);
+  }
+
   excluir(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }

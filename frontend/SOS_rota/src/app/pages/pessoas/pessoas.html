@@ -4,8 +4,17 @@
     <div>
       <span class="eyebrow">GESTÃO DE PESSOAS</span>
       <h1>Pessoas</h1>
-      <p>Profissionais carregados a partir da base inicial do backend.</p>
+      <p>Profissionais cadastrados no sistema operacional.</p>
     </div>
+
+    <button
+      class="btn-primary"
+      type="button"
+      (click)="abrirModal()"
+    >
+      <i class="bi bi-plus-circle"></i>
+      Nova Pessoa
+    </button>
   </div>
 
   <div class="metrics-grid">
@@ -13,7 +22,7 @@
     <div class="metric-card">
       <span>Total de Pessoas</span>
       <strong>{{ pessoas.length }}</strong>
-      <small>Base inicial via CSV</small>
+      <small>Registros carregados e simulados</small>
     </div>
 
     <div class="metric-card success">
@@ -26,6 +35,12 @@
       <span>Em Atendimento</span>
       <strong>{{ pessoasEmAtendimento }}</strong>
       <small>Já vinculadas a operação</small>
+    </div>
+
+    <div class="metric-card danger">
+      <span>Indisponíveis</span>
+      <strong>{{ pessoasIndisponiveis }}</strong>
+      <small>Fora de operação</small>
     </div>
 
   </div>
@@ -41,6 +56,7 @@
         </div>
 
         <div class="person-info">
+
           <div class="person-top">
             <div>
               <h2>{{ pessoa.nome }}</h2>
@@ -63,6 +79,35 @@
               {{ pessoa.email }}
             </span>
           </div>
+
+          <div class="person-actions">
+
+            <button
+              class="btn-edit"
+              type="button"
+              (click)="editarPessoa(pessoa)"
+            >
+              <i class="bi bi-pencil-square"></i>
+              Editar
+            </button>
+
+            <button
+              class="btn-delete"
+              type="button"
+              (click)="excluirPessoa(pessoa)"
+              [disabled]="!podeExcluirPessoa(pessoa)"
+              [title]="
+                podeExcluirPessoa(pessoa)
+                  ? 'Excluir pessoa'
+                  : 'Somente pessoas disponíveis podem ser excluídas'
+              "
+            >
+              <i class="bi bi-trash"></i>
+              Excluir
+            </button>
+
+          </div>
+
         </div>
 
       </div>
@@ -70,11 +115,159 @@
     } @empty {
 
       <div class="empty-state">
-        Nenhuma pessoa encontrada na base do backend.
+        Nenhuma pessoa cadastrada ainda.
       </div>
 
     }
 
   </div>
+
+  @if (modalAberto) {
+
+    <div class="modal-overlay" (click)="fecharModal()">
+
+      <div class="modal-panel" (click)="$event.stopPropagation()">
+
+        <div class="modal-header">
+
+          <h2>
+            {{
+              pessoaEditandoId !== null
+                ? 'Editar Pessoa'
+                : 'Nova Pessoa'
+            }}
+          </h2>
+
+          <button
+            class="close-btn"
+            type="button"
+            (click)="fecharModal()"
+          >
+            <i class="bi bi-x-lg"></i>
+          </button>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Nome</label>
+
+          <input
+            type="text"
+            placeholder="Ex.: Ana Ribeiro"
+            [(ngModel)]="novaPessoa.nome"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Cargo</label>
+
+          <select [(ngModel)]="novaPessoa.cargo">
+            <option value="">Selecione o cargo...</option>
+            <option value="Médica">Médica</option>
+            <option value="Médico">Médico</option>
+            <option value="Enfermeira">Enfermeira</option>
+            <option value="Enfermeiro">Enfermeiro</option>
+            <option value="Técnico em Enfermagem">Técnico em Enfermagem</option>
+            <option value="Condutor Socorrista">Condutor Socorrista</option>
+            <option value="Coordenador Operacional">Coordenador Operacional</option>
+          </select>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Telefone</label>
+
+          <input
+            type="text"
+            placeholder="Ex.: (11) 98765-4321"
+            [(ngModel)]="novaPessoa.telefone"
+          />
+
+          <small class="field-hint">
+            Use o formato brasileiro: (11) 98765-4321.
+          </small>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>E-mail</label>
+
+          <input
+            type="email"
+            placeholder="Ex.: pessoa@vitalis.com"
+            [(ngModel)]="novaPessoa.email"
+          />
+
+          <small class="field-hint">
+            O sistema não permite e-mails duplicados.
+          </small>
+
+        </div>
+
+        @if (pessoaEditandoId !== null) {
+
+          <div class="form-group">
+
+            <label>Status</label>
+
+            <select [(ngModel)]="novaPessoa.status">
+              <option value="DISPONIVEL">Disponível</option>
+              <option value="EM_ATENDIMENTO">Em Atendimento</option>
+              <option value="INDISPONIVEL">Indisponível</option>
+            </select>
+
+            <small class="field-hint">
+              O status só pode ser alterado na edição da pessoa.
+            </small>
+
+          </div>
+
+        }
+
+        <div class="business-rule-box">
+          <i class="bi bi-shield-check"></i>
+
+          <span>
+            Ao cadastrar, a pessoa sempre entra como disponível. Pessoas em atendimento ou indisponíveis não podem ser excluídas.
+          </span>
+        </div>
+
+        <div class="modal-actions">
+
+          <button
+            class="btn-secondary"
+            type="button"
+            (click)="fecharModal()"
+          >
+            Cancelar
+          </button>
+
+          <button
+            class="btn-primary"
+            type="button"
+            (click)="salvarPessoa()"
+            [disabled]="carregando"
+          >
+            @if (carregando) {
+              Salvando...
+            } @else if (pessoaEditandoId !== null) {
+              Salvar Alterações
+            } @else {
+              Cadastrar Pessoa
+            }
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
 
 </section>
